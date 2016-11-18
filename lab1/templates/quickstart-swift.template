@@ -87,7 +87,8 @@
             "Description": "The name of ECR repository in all lower case",
             "Type": "String",
             "AllowedPattern": "[a-z]*",
-            "ConstraintDescription": "Must be all lower case."
+            "ConstraintDescription": "Must be all lower case.",
+            "MinLength": 1
         }
 
     },

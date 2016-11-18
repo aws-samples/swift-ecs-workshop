@@ -75,28 +75,29 @@ The CloudFormation stack outputs a few commands that you’ll need during the de
 **Configuration**
 
 1. SSH into the Bastion Instance using the
-{{SSHToBastion}} command from the above Cloudformation template
+*SSHToBastion* command from the above Cloudformation template
 
 	Please configure awscli using the command 
-	`aws configure` with your access key and secret
+	`aws configure` with your access key and secret for the admin user. Chose `us-east-1` as a default region.
 	
 	If you are using a Windows laptop, please the steps listed here: [http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html]()
 
-2. Clone the repo provided from **github repo** on the bastion instance.
+2. Clone the repo provided from *https://github.com/awslabs/swift-ecs-workshop* on the bastion instance using the command 
+```git clone https://github.com/awslabs/swift-ecs-workshop```
 
-3. Change directory to  lab1/swift-product/
+3. Change directory to  swift-ecs-workshop/lab1/swift-product/
 Modify the **Config/secrets/mysql.json** file host to your Database instance endpoint from the cloudformation output.
 
 4.	Build, tag, and push a Docker image to ECR
 	
 	* Go to the bastion host terminal you ssh'd in Step (1)
-	* Build a Docker image
+	* Build a Docker image 
 		```docker build -t swift-on-ecs-prebuilt --build-arg SWIFT_VERSION=3.0-RELEASE . ```
 
 	* Retrieve the Docker login command
 	`aws ecr get-login --region us-east-1`
 
-	* Run the output of the previous command to log in to Docker
+	* Run the output of the previous command to log into Docker
 
 	*	Tag the image using the `{{TagPreBuiltImage}}` from Cloudformation outputs.
 
@@ -106,7 +107,7 @@ Modify the **Config/secrets/mysql.json** file host to your Database instance end
 
 	*	Task Definition Name: `swift-on-ecs-task`
 	*	Add Container
-		*	Image: `{{RepositoryURL}}:latest` . you can RepositoryURL from Cloudformation outputs
+		*	Image: `{{RepositoryURL}}:latest` . you can find the RepositoryURL from Cloudformation outputs
 		*	Maximum memory: 300
 		*	Host port: 80
 		*	Container port: 8080
