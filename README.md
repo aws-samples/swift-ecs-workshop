@@ -83,12 +83,13 @@ The CloudFormation stack outputs a few commands that you’ll need during the de
 	If you are using a Windows laptop, please the steps listed here: [http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html]()
 
 2. Clone the repo provided from *https://github.com/awslabs/swift-ecs-workshop* on the bastion instance using the command
-```git clone https://github.com/awslabs/swift-ecs-workshop```
+`git clone https://github.com/awslabs/swift-ecs-workshop`
 
 3. Change directory to  swift-ecs-workshop/lab1/swift-product/
-Modify the **Config/secrets/mysql.json** file host to your Database instance endpoint from the cloudformation output.
 
-4.	Build, tag, and push a Docker image to ECR
+4. Modify the **Config/secrets/mysql.json** file host to your Database instance endpoint from the cloudformation output.
+
+5.	Build, tag, and push a Docker image to ECR
 
 	* Go to the bastion host terminal you ssh'd in Step (1)
 	* Build a Docker image
@@ -103,7 +104,7 @@ Modify the **Config/secrets/mysql.json** file host to your Database instance end
 
 	*	Push the image to the ECS Repository using `{{PushPreBuiltImage}}` from Cloudformation outputs
 
-5. 	 Go to AWS ECS Console, and Create a Task Definition
+6. 	 Go to AWS ECS Console, and Create a Task Definition
 
 	*	Task Definition Name: `swift-on-ecs-task`
 	*	Add Container
@@ -116,7 +117,7 @@ Modify the **Config/secrets/mysql.json** file host to your Database instance end
 
 	*	Click ‘Create’
 
-6.	Create a Service by clicking on the Action's Button -> Create Service
+7.	Create a Service by clicking on the Action's Button -> Create Service
 
 	*	Task Definition: `swift-on-ecs-task:1`
 	*	Service name: `swift-on-ecs-service`
