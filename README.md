@@ -192,7 +192,7 @@ Request body:
 4.	Once the app is up and running you will find that it has one existing option, which indicates the user sign in process through Cognito.
 5.	We want to add another option to the app main page. This page when clicked will show up the product listing. We will add the corresponding code to the web service, which will return a JSON data getting serialized to an object and display in this new page.
 
-6.	Download the zip package “zipforlab3.zip” which contains the three files below:
+6.	Download the zip package from https://github.com/awslabs/swift-ecs-workshop/tree/master/lab3/zipforlab3.zip” which contains the three files below:
 
 	ProductListing.storyboard
 
@@ -204,32 +204,35 @@ Request body:
  to the sample you built using mobile hub under the following location:
 
 	MobileHub Sample Folder/MySampleApp/MySampleApp/ProductListingViewController.swift
-	
+
 	MobileHub Sample Folder/MySampleApp/MySampleApp/ProductListing.storyboard
 
-8.Overwrite MainViewController.swift by copying it under mobile hub sample app under the following location:
+8. Overwrite MainViewController.swift by copying it from the unziped package and pasting it under mobile hub sample app at the following location:
 
-	MobileHub Sample Folder/MySampleApp/App/MainViewController.swift
+	MobileHub Sample Folder/MySampleApp/MySampleApp/App/MainViewController.swift
 
-9.Open Xcode again to add files to your project.
+9. Open Xcode again to add files to your project.
 
-	a. Right click on MySampleApp→App and choose “Add Files to MySampleApp”. ‘
+	a. Right click on MySampleApp→App and choose “Add Files to MySampleApp”.
+
 	b. Choose ProductListing.storyboard and ProductListingViewController.swift.    
+
 	c. Check “Copy items if needed”.
+
 	d. Click “Add”.
 
-10.Open ProductListingViewController.swift
+10. Open ProductListingViewController.swift
 
-11.Search for “let url” and replace the existing URL with the URL for your service that your built in lab 1 and 2.
-12.Save the project.
+11. Search for “let url” and replace the existing URL with the URL for your service that your built in lab 1 and 2.
+12. Save the project.
 
-13.Build the project.
+13. Build the project.
 
-14.Run it for iPhone 6s.
+14. Run it for iPhone 6s.
 
-15.In the app, first sign in using Facebook using the “Sign-in” button on the top right hand corner.
+15. In the app, first sign in using Facebook using the “Sign-in” button on the top right hand corner.
 
-16.Once you are successfully signed in, Gg back to main page and click on “Access Swift DB”.
+16. Once you are successfully signed in, go back to main page in the app and click on “Access Swift DB”.
 
 ##Lab 3: Testing the app on Device Farm
 
