@@ -310,10 +310,10 @@ In this lab, you will create an automated workflow that will provision, configur
 Follow the instructions below to Create and Connect to an AWS CodeCommit Repository. You may also refer to the instructions at AWS CodeCommit documentation
 
 1.	Go to AWS Console and select CodeCommit. Click **Create New repository** button.  Enter a unique repository name and a description ex. swift-product and click **Create repository**.
-	<https://git-codecommit.us-east-1.amazonaws.com/v1/repos/swift-product>
+	![]<https://git-codecommit.us-east-1.amazonaws.com/v1/repos/swift-product>
 
 2.	You can use https or ssh to connect to your CodeCommit repository. We’ll connect via SSH in this lab. The steps need initial set up for AWS CodeCommit and steps for Linux/MacOS is provided as below. For other platform, refer to this link
-	<http://docs.aws.amazon.com/codecommit/latest/userguide/how-to-connect.html>
+	![]<http://docs.aws.amazon.com/codecommit/latest/userguide/how-to-connect.html>
 	* Create a new IAM user at IAM console. (Use your credentials from Lab1)
 	* Add the following managed policies for the IAM user.
 		> *  WSCodeCommitFullAccess
@@ -324,35 +324,40 @@ Follow the instructions below to Create and Connect to an AWS CodeCommit Reposit
 
 	* On the Bastion host, open a terminal window on Bastion host and type
 
-		```
-		cd $HOME/.ssh
-		ssh-keygen
-		```
-			When prompted, use a name like lab4codecommit_rsa and you can leave passphrase as blank. Hit enter.
-		```
-		cat lab4codecommit_rsa.pub
-		```
+			```
+				cd $HOME/.ssh
+				ssh-keygen
+			```
+
+	 When prompted, use a name like lab4codecommit_rsa and you can leave passphrase as blank. Hit enter.
+			
+			```
+				cat lab4codecommit_rsa.pub
+			```
 
 	* Go to IAM, select the user you have created and click on Security Credentials tab.
 		* Click Upload SSH Public key button. Copy the contents from file ‘lab4codecommit_rsa.pub’ in the text box and save.
 
 	* Go back to terminal and type
-	```
-		touch config
-		chmod 600 config
-		sudo vim config  
-	```
-		and paste the following
-		**Note:** Ensure that this is the first entry in the config file
-	```
-		Host git-codecommit.*.amazonaws.com
-		User <SSH_KEY_ID_FROM_IAM>  Value for the SSH key id from Step c above
-		IdentityFile ~/.ssh/lab4codecommit_rsa
-	```
+		```
+			touch config
+			chmod 600 config
+			sudo vim config  
+		```
+
+	 and paste the following
+	 **Note:** Ensure that this is the first entry in the config file
+		
+		```
+			Host git-codecommit.*.amazonaws.com
+			User <SSH_KEY_ID_FROM_IAM>  Value for the SSH key id from Step c above
+			IdentityFile ~/.ssh/lab4codecommit_rsa
+		```
   * Verify your SSH connection. Type the following and confirm that you get a successful response.
-	```
-		ssh git-codecommit.us-east-1.amazonaws.com
-	```
+	
+			```
+				ssh git-codecommit.us-east-1.amazonaws.com
+			```
 
 #### Step 2: Commit the Source Code and Configuration files into your CodeCommit repository
 
@@ -363,16 +368,18 @@ Follow the instructions below to Create and Connect to an AWS CodeCommit Reposit
 This will create a folder “swift-product” in your path where you executed the git clone command.
 
 Copy the contents of lab4/swift-products-example/ directory into this new folder. The contents provide from git clone ssh://git.amazon.com/pkg/Amazon-ecs-swift-workshop
-	```
-		~/lab4/swift-products-example$ cp -r * ~/swift-product/
-	```
+		
+		```
+			~/lab4/swift-products-example$ cp -r * ~/swift-product/
+		```
 
 2.	Commit all of the copied contents into your CodeCommit repository.
-	```
-		git add --all
-	 	git commit -m "Initial Commit"
-		git push origin master	-- Tip: Verify the file .git/config for remote==”origin” and branch==”master”
-	```
+		
+		```
+			git add --all
+		 	git commit -m "Initial Commit"
+			git push origin master	-- Tip: Verify the file .git/config for remote==”origin” and branch==”master”
+		```
 
 You are using this CodeCommit repository to store you swift application code along with docker configuration files.  In Lab1, you have built a docker image and pushed the image to ECS.
 
@@ -418,26 +425,31 @@ A code change committed to CodeCommit repository will trigger image creation, cr
 
 #### Step 4: Configure your swift package to connect with RDS containing product data.
 Open the following file
-	```
-	~/swift-product/Config/secrets$ cat mysql.json
-	```
+
+		```
+			~/swift-product/Config/secrets$ cat mysql.json
+		```
+		
 and update host parameter with RDS endpoint that has been created for you in CloudFormation template ( Check RDS Console for endpoint)
+
 		```
-		{
-		  "host": "<Your RDS endpoint here, do not include port number>",
-		  "user": "admin",
-		  "password": "password",
-		  "database": "testDB",
-		  "port": "3306",
-		  "encoding": "utf8"
-		}
-	```
+			{
+			  "host": "<Your RDS endpoint here, do not include port number>",
+			  "user": "admin",
+			  "password": "password",
+			  "database": "testDB",
+			  "port": "3306",
+			  "encoding": "utf8"
+			}
+		```
+		
 Commit the changes to your CodeCommit repo
+
 		```
-		git add --all
-  	git status
-  	git commit -m "db change"
-    git push origin master
+			git add --all
+	  		git status
+	  		git commit -m "db change"
+	    		git push origin master
 		```
 
 Once the changes are checked in, verify that your CodePipeline is executing, creating a new Docker image and deploying on ECS.
@@ -457,7 +469,6 @@ You should see the Vapor homepage.
 **Congratulations:** Your Swift package is deployed on ECS container automatically.
 
 Check out the product page by adding “/products” to the URL above.
-
 
 ###Cleanup
 
