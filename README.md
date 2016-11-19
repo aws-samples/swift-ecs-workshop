@@ -297,146 +297,154 @@ Request body:
 
 ##Lab 4: Enhance the backend api and deploy to Amazon ECS using CodeCommit and CodePipeline
 
+**Note:** Use the Bastion host created in lab1 for connecting to CodeCommit repository below
 
-**Noe:**Use the Bastion host created in lab1 for connecting to CodeCommit repository below.
-This lab utilizes the resources provisioned in lab1.
-
-Please continue using AWS region us-east-1 (N. Virginia/US Standard)
+This lab utilizes the resources provisioned in lab1. Please continue using AWS region us-east-1 (N. Virginia/US Standard)
 
 In this lab, you will create an automated workflow that will provision, configure and orchestrate a pipeline triggering deployment of any changes to your swift package. You will orchestrate all of the changes into a deployment pipeline to achieve continuous delivery using CodePipeline and Jenkins. You can deploy new features and/or fixes and make those available to your users in just minutes, not days or weeks.
 
-**Note:**While you can perform these actions independent, you can leverage the set up created for Lab1 and continue utilizing existing infrastructure.
+**Note:** While you can perform these actions independent, you can also leverage the set up created for Lab1 and continue utilizing existing infrastructure.
 
 #### Step 1: Create a CodeCommit repository and Connect (your Bastion host) with this repository
 
 Follow the instructions below to Create and Connect to an AWS CodeCommit Repository. You may also refer to the instructions at AWS CodeCommit documentation
 
-1.	Go to AWS Console and select CodeCommit. Click “Create New repository” button.  Enter a unique repository name and a description ex. swift-product and click “Create repository”.
-https://git-codecommit.us-east-1.amazonaws.com/v1/repos/swift-Product
+1.	Go to AWS Console and select CodeCommit. Click **Create New repository** button.  Enter a unique repository name and a description ex. swift-product and click **Create repository**.
+	<https://git-codecommit.us-east-1.amazonaws.com/v1/repos/swift-product>
 
 2.	You can use https or ssh to connect to your CodeCommit repository. We’ll connect via SSH in this lab. The steps need initial set up for AWS CodeCommit and steps for Linux/MacOS is provided as below. For other platform, refer to this link
+	<http://docs.aws.amazon.com/codecommit/latest/userguide/how-to-connect.html>
 	* Create a new IAM user at IAM console. (Use your credentials from Lab1)
-	* Add the following managed policies for the IAM user. 	
-		WSCodeCommitFullAccess
-		AmazonEC2ContainerRegistryFullAccess
-		AmazonEC2ContainerServiceFullAccess
-		IAMReadOnlyAccess
-		IAMUserSSHKeys
+	* Add the following managed policies for the IAM user.
+		> *  WSCodeCommitFullAccess
+		> *  AmazonEC2ContainerRegistryFullAccess
+		> *  AmazonEC2ContainerServiceFullAccess
+		> *  IAMReadOnlyAccess
+		> *  IAMUserSSHKeys
 
 	* On the Bastion host, open a terminal window on Bastion host and type
-		* cd $HOME/.ssh
-		* ssh-keygen
-			When prompted, use a name like lab2codecommit_rsa and you can leave passphrase as blank. Hit enter.
-		* cat lab2codecommit_rsa.pub
+
+		```
+		cd $HOME/.ssh
+		ssh-keygen
+		```
+			When prompted, use a name like lab4codecommit_rsa and you can leave passphrase as blank. Hit enter.
+		```
+		cat lab4codecommit_rsa.pub
+		```
 
 	* Go to IAM, select the user you have created and click on Security Credentials tab.
-		* Click Upload SSH Public key button. Copy the contents from file ‘lab2codecommit_rsa.pub’ in the text box and save.
+		* Click Upload SSH Public key button. Copy the contents from file ‘lab4codecommit_rsa.pub’ in the text box and save.
 
 	* Go back to terminal and type
-		* touch config
-		* chmod 600 config
-		*	sudo vim config  and paste the following
-		*(Note: Ensure that this is the first entry in the config file)*
-
->          Host git-codecommit.*.amazonaws.com   
->          User <SSH_KEY_ID_FROM_IAM>  Value for the SSH key id from Step c above
->          IdentityFile ~/.ssh/lab2codecommit_rsa
-
+	```
+		touch config
+		chmod 600 config
+		sudo vim config  
+	```
+		and paste the following
+		**Note:** Ensure that this is the first entry in the config file
+	```
+		Host git-codecommit.*.amazonaws.com
+		User <SSH_KEY_ID_FROM_IAM>  Value for the SSH key id from Step c above
+		IdentityFile ~/.ssh/lab4codecommit_rsa
+	```
   * Verify your SSH connection. Type the following and confirm that you get a successful response.
-> ssh git-codecommit.us-east-1.amazonaws.com
+	```
+		ssh git-codecommit.us-east-1.amazonaws.com
+	```
 
-#### Step 2: Commit the Source Code and Configuration files into your Codecommit repository
+#### Step 2: Commit the Source Code and Configuration files into your CodeCommit repository
 
 1.	On the Bastion host, clone a local copy of CodeCommt repo you created earlier in your home directory.
-git clone ssh://git-codecommit.us-east-1.amazonaws.com/v1/repos/swift-product
+	```
+		git clone ssh://git-codecommit.us-east-1.amazonaws.com/v1/repos/swift-product
+	```
 This will create a folder “swift-product” in your path where you executed the git clone command.
 
-Copy the contents of lab2/swift-products-example/ directory into this new folder. The contents provide from git clone ssh://git.amazon.com/pkg/Amazon-ecs-swift-workshop
-~/lab2/swift-products-example$ cp -r * ~/swift-product/
+Copy the contents of lab4/swift-products-example/ directory into this new folder. The contents provide from git clone ssh://git.amazon.com/pkg/Amazon-ecs-swift-workshop
+	```
+		~/lab4/swift-products-example$ cp -r * ~/swift-product/
+	```
 
 2.	Commit all of the copied contents into your CodeCommit repository.
-git add --all
-	 git commit -m "Initial Commit"
-git push origin master	-- Tip: Verify the file .git/config for remote==”origin” and branch==”master”				
+	```
+		git add --all
+	 	git commit -m "Initial Commit"
+		git push origin master	-- Tip: Verify the file .git/config for remote==”origin” and branch==”master”
+	```
 
 You are using this CodeCommit repository to store you swift application code along with docker configuration files.  In Lab1, you have built a docker image and pushed the image to ECS.
 
 #### Step 3: Deploy the automated Swift package via CloudFormation template.
 
-Pick the template from https://s3.amazonaws.com/ecs-swift-bootcamp/swift-on-ecs-CDV1.json.
+Pick the template from <https://s3.amazonaws.com/ecs-swift-bootcamp/swift-on-ecs-CD.json>.
 Template is also provided at
-https://code.amazon.com/packages/Amazon-ecs-swift-workshop/trees/mainline/--/lab2/templates
+<https://github.com/awslabs/swift-ecs-workshop/tree/master/lab4/templates>
 
 The template accepts the following parameters:
 
-AppName
-ecs-swift-app <- Name of your application
-DesiredCapacity
-1 <- Provide appropriate desired capacity
-ECSCFNURL
-https://s3.amazonaws.com/ecs-swift-bootcamp/swift-on-ecs-CD.json <- S3 link to this cloudformation template
-ECSRepoName
-ecs-swift-bootcamp-ecr-repo <- Name of ECR repo where ECS image is stored
-ImageTag
-latest <- Image tag
-InstanceType
-t2.micro
-KeyName
-xxKeyPair <- Key pair name for SSH access
-MaxSize
-1 <-  Desired max size
-RepositoryBranch
-master
-RepositoryName
-swift-Product <- Name of the CodeCommit repository
-SSHLocation
-0.0.0.0/0
-YourIP
-0.0.0.0/0 <- Provide your public IP
+> *  AppName ecs-swift-app <- Name of your application
+> *  DesiredCapacity1 <- Provide appropriate desired capacity
+> *  ECSCFNURL https://s3.amazonaws.com/ecs-swift-bootcamp/swift-on-ecs-CD.json <- S3 link to this CloudFormation template
+> *  ECSRepoName ecs-swift-bootcamp-ecr-repo <- Name of ECR repo where ECS image is stored
+> *  ImageTag latest <- Image tag
+> *  InstanceType t2.micro
+> *  KeyName xxKeyPair <- Key pair name for SSH access
+> *  MaxSize 1 <-  Desired max size
+> *  RepositoryBranch master
+> *  RepositoryName swift-product <- Name of the CodeCommit repository
+> *  SSHLocation 0.0.0.0/0
+> *  YourIP 0.0.0.0/0 <- Provide your public IP or allow all
 
 The stack takes approximately 15 minutes to create all resources.
 
 The template creates a number of AWS resources to facilitate the automated workflow.
 
-•	Virtual Private Cloud (VPC) – A VPC with VPC resources such as: VPCGatewayAttachment, SecurityGroup, SecurityGroupIngress, SecurityGroupEgress, SubnetNetworkAclAssociation, NetworkAclEntry, NetworkAcl, SubnetRouteTableAssociation, Route, RouteTable, InternetGateway, and Subnet
-•	Auto Scaling Group – An auto scaling group to scale the underlying EC2 infrastructure in the ECS Cluster. It’s used in conjunction with the Launch Configuration.
-•	Auto Scaling Launch Configuration – A launch configuration to scale the underlying EC2 infrastructure in the ECS Cluster. It’s used in conjunction with the Auto Scaling Group.
-•	Jenkins –Jenkins to execute the actions that we defined in CodePipeline. For example, a bash script that updates the CloudFormation stack when an ECS Service is updated. This action is orchestrated via CodePipeline and then executed on the Jenkins server on one of its configured jobs. 
-•	CodePipeline – CodePipeline describes Continuous Delivery workflow. In particular, it integrates with CodeCommit and Jenkins to run actions every time you commit new code to the CodeCommit repo.
-•	IAM Instance Profile – “An instance profile is a container for an IAM role that you can use to pass role information to an EC2 instance when the instance starts.”
-•	IAM Roles – Roles that have access to certain AWS resources for the EC2 instances (for ECS), Jenkins and CodePipeline
-•	ECS Cluster – “An ECS cluster is a logical grouping of container instances that you can place tasks on.”
-•	ECS Service – An ECS service, you can run a specific number of instances of a task definition simultaneously in an ECS cluster
-•	ECS Task Definition – A task definition is the core resource within ECS. This is where you define which Docker images to run, CPU/Memory, ports, commands and so on.
-•	Elastic Load Balancer – The ELB provides the endpoint for the application. The ELB dynamically determines which EC2 instance in the cluster is serving the running ECS tasks at any given time.
-•	RDS MySQL instance – Contents the product details for the Swift application package
+> *  **Virtual Private Cloud (VPC)** – A VPC with VPC resources such as: VPCGatewayAttachment, SecurityGroup, SecurityGroupIngress, SecurityGroupEgress, SubnetNetworkAclAssociation, NetworkAclEntry, NetworkAcl, SubnetRouteTableAssociation, Route, RouteTable, InternetGateway, and Subnet
+> *  **Auto Scaling Group** – An auto scaling group to scale the underlying EC2 infrastructure in the ECS Cluster. It’s used in conjunction with the Launch Configuration.
+> *  **Auto Scaling Launch Configuration** – A launch configuration to scale the underlying EC2 infrastructure in the ECS Cluster. It’s used in conjunction with the Auto Scaling Group.
+> *  **Jenkins** –Jenkins to execute the actions that we defined in CodePipeline. For example, a bash script that updates the CloudFormation stack when an ECS Service is updated. This action is orchestrated via CodePipeline and then executed on the Jenkins server on one of its configured jobs. 
+> *  **CodePipeline** – CodePipeline describes Continuous Delivery workflow. In particular, it integrates with CodeCommit and Jenkins to run actions every time you commit new code to the CodeCommit repo.
+> *  **IAM Instance Profile** – “An instance profile is a container for an IAM role that you can use to pass role information to an EC2 instance when the instance starts.”
+> *  **IAM Roles** – Roles that have access to certain AWS resources for the EC2 instances (for ECS), Jenkins and CodePipeline
+> *  **ECS Cluster** – “An ECS cluster is a logical grouping of container instances that you can place tasks on.”
+> *  **ECS Service** – An ECS service, you can run a specific number of instances of a task definition simultaneously in an ECS cluster
+> *  **ECS Task Definition** – A task definition is the core resource within ECS. This is where you define which Docker images to run, CPU/Memory, ports, commands and so on.
+> *  **Elastic Load Balancer** – The ELB provides the endpoint for the application. The ELB dynamically determines which EC2 instance in the cluster is serving the running ECS tasks at any given time.
+> *  **RDS MySQL instance** – Contents the product details for the Swift application package
 
 A code change committed to CodeCommit repository will trigger image creation, create a task definition, create the service and run the task in an auto-scaled pool of containers running behind an elastic load balancer.
 
 #### Step 4: Configure your swift package to connect with RDS containing product data.
 Open the following file
+	```
 	~/swift-product/Config/secrets$ cat mysql.json
+	```
 and update host parameter with RDS endpoint that has been created for you in CloudFormation template ( Check RDS Console for endpoint)
-	{
-  "host": "<Your RDS endpoint here, do not include port number>",
-  "user": "admin",
-  "password": "password",
-  "database": "testDB",
-  "port": "3306",
-  "encoding": "utf8"
-}
-
+		```
+		{
+		  "host": "<Your RDS endpoint here, do not include port number>",
+		  "user": "admin",
+		  "password": "password",
+		  "database": "testDB",
+		  "port": "3306",
+		  "encoding": "utf8"
+		}
+	```
 Commit the changes to your CodeCommit repo
-	git add --all
+		```
+		git add --all
   	git status
   	git commit -m "db change"
     git push origin master
+		```
 
 Once the changes are checked in, verify that your CodePipeline is executing, creating a new Docker image and deploying on ECS.
 
 #### Step 5: Validation.
 
-You can monitor the build process on the UI for the Jenkis server created for you in CloudFormation. Get the public IP address of the Jenkins server from EC2 console and view the Jenkins build progress.
+You can monitor the build process on the UI for the Jenkins server created for you in CloudFormation. Get the public IP address of the Jenkins server from EC2 console and view the Jenkins build progress.
 An update to the CloudFormation stack will be triggered once Jenkins server returns a successful result to CodePipeline.
 
 Once the stack update is completed, refer to the output of your CloudFormation and click on ‘AppURL’
@@ -446,10 +454,9 @@ You will see a URL similar to:
 http://<stackname>-EcsElb-<container>-<image>.us-east-1.elb.amazonaws.com/
 
 You should see the Vapor homepage.
-Congratulations: Your Swift package is deployed on ECS container automatically.
+**Congratulations:** Your Swift package is deployed on ECS container automatically.
 
 Check out the product page by adding “/products” to the URL above.
-
 
 
 ###Cleanup
