@@ -248,8 +248,23 @@ Request body:
 
 1. Once you have successfully run the app we want to test the app on device farm.
 2. First we want to retrieve the .ipa file of the app that we just built. As this process may not be seamless for everyone in the room given that you require an Apple Developer account and Xcode configured to do this we have provided a prebuilt IPA file which is exactly the same app that you build using Mobile Hub and modified in Lab 2.
-3. The prebuilt IPA can be found here https://github.com/awslabs/swift-ecs-workshop/tree/master/lab3/MySampleApp.ipa with the name "MySampleApp.ipa". We would recommend using this. If you have your Xcode configured to build IPA files you can follow step 4 through 10. For everyone else jump to step 11.
-4. Make sure you have the following configuration if you are not an apple developer or do not have xcode setup to build apps.
+3. The prebuilt IPA can be found here https://github.com/awslabs/swift-ecs-workshop/tree/master/lab3/MySampleApp.ipa with the name "MySampleApp.ipa". We would recommend using this. If you have your Xcode configured and want to build IPA files by yourself, you can follow the steps in the next optional section (Steps to build IPA) below.
+4.	Open aws.amazon.com console.
+5.	On the console home page under Mobile Services select Device Farm.
+6.	Create a new Project. Give it a name “re:Invent 2016”.
+7.	Under project “Intent 2016” click on “Create a new Run”.
+8.	First we want to upload our iOS app. Click on the Android/Apple logo button.
+9.	Next click on the “Upload” button. This will open a Finder window, which will ask for the ipa file. Select our MySampleApp.ipa file.
+10.	Next click on “Next step”.
+11.	By default the test type selected will be “Built-in: Fuzz”. Click on “Next step”
+12.	On the Select devices page it will show the top pool of devices. We will work with this pool. Click on “Next Step”.
+13.	On the “Specify device state” page we do not want to change anything. Click on “Review and start run”.
+14.	The tests will run for around 15 mins.
+15.	Once the tests are finished you can view the detailed report of the test run.
+
+**(Optional) Steps to build IPA**
+
+1. Make sure you have the following configuration if you are not an apple developer or do not have xcode setup to build apps.
 
 	a.	Ensure that you have an Apple ID signed in your Xcode.
 
@@ -287,26 +302,12 @@ Request body:
 
 	r.	Select Release → Any iOS SDK → iOS Developer
 
-5.	This should generate a MySample.app file under Products folder.
-6.	Right click on the MySample.app file and select “Show in Finder”.
-7.	Create an empty folder and call it “Payload” (case-sensitive).
-8.	Copy the MySample.app file in the “Payload” folder.
-9.	Archive “Payload” folder and rename the zip file to Sample.ipa
-10.	We now have the ipa file which we will upload to AWS Device Farm and run tests against.
-11.	Open aws.amazon.com console.
-12.	On the console home page under Mobile Services select Device Farm.
-13.	Create a new Project. Give it a name “re:Invent 2016”.
-14.	Under project “Intent 2016” click on “Create a new Run”.
-15.	First we want to upload our iOS app. Click on the Android/Apple logo button.
-16.	Next click on the “Upload” button. This will open a Finder window, which will ask for the ipa file. Select our MySampleApp.ipa file.
-17.	Next click on “Next step”.
-18.	By default the test type selected will be “Built-in: Fuzz”. Click on “Next step”
-19.	On the Select devices page it will show the top pool of devices. We will work with this pool. Click on “Next Step”.
-20.	On the “Specify device state” page we do not want to change anything. Click on “Review and start run”.
-21.	The tests will run for around 15 mins.
-22.	Once the tests are finished you can view the detailed report of the test run.
-
-
+2.	This should generate a MySample.app file under Products folder.
+3.	Right click on the MySample.app file and select “Show in Finder”.
+4.	Create an empty folder and call it “Payload” (case-sensitive).
+5.	Copy the MySample.app file in the “Payload” folder.
+6.	Archive “Payload” folder and rename the zip file to Sample.ipa
+7.	We now have the ipa file which we will upload to AWS Device Farm and run tests against.
 
 ##Lab 4: Enhance the backend api and deploy to Amazon ECS using CodeCommit and CodePipeline
 
@@ -343,7 +344,7 @@ Follow the instructions below to Create and Connect to an AWS CodeCommit Reposit
 			```
 
 	 When prompted, use a name like lab4codecommit_rsa and you can leave passphrase as blank. Hit enter.
-			
+
 			```
 				cat lab4codecommit_rsa.pub
 			```
@@ -360,14 +361,14 @@ Follow the instructions below to Create and Connect to an AWS CodeCommit Reposit
 
 	 and paste the following
 	 **Note:** Ensure that this is the first entry in the config file
-		
+
 		```
 			Host git-codecommit.*.amazonaws.com
 			User <SSH_KEY_ID_FROM_IAM>  Value for the SSH key id from Step c above
 			IdentityFile ~/.ssh/lab4codecommit_rsa
 		```
   * Verify your SSH connection. Type the following and confirm that you get a successful response.
-	
+
 			```
 				ssh git-codecommit.us-east-1.amazonaws.com
 			```
@@ -381,13 +382,13 @@ Follow the instructions below to Create and Connect to an AWS CodeCommit Reposit
 This will create a folder “swift-product” in your path where you executed the git clone command.
 
 Copy the contents of lab4/swift-products-example/ directory into this new folder. The contents provide from git clone ssh://git.amazon.com/pkg/Amazon-ecs-swift-workshop
-		
+
 		```
 			~/lab4/swift-products-example$ cp -r * ~/swift-product/
 		```
 
 2.	Commit all of the copied contents into your CodeCommit repository.
-		
+
 		```
 			git add --all
 		 	git commit -m "Initial Commit"
@@ -442,7 +443,7 @@ Open the following file
 		```
 			~/swift-product/Config/secrets$ cat mysql.json
 		```
-		
+
 and update host parameter with RDS endpoint that has been created for you in CloudFormation template ( Check RDS Console for endpoint)
 
 		```
@@ -455,7 +456,7 @@ and update host parameter with RDS endpoint that has been created for you in Clo
 			  "encoding": "utf8"
 			}
 		```
-		
+
 Commit the changes to your CodeCommit repo
 
 		```
