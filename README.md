@@ -233,7 +233,7 @@ Request body:
 
 10. Open ProductListingViewController.swift
 
-11. Search for “let url” and replace the existing URL with the URL for your service that your built in lab 1 and 2.
+11. Search for “let url” and replace the first instance of existing URL with the URL for your service that your built in lab 1 and 2.
 12. Save the project.
 
 13. Build the project.
@@ -252,7 +252,7 @@ Request body:
 4.	Open aws.amazon.com console.
 5.	On the console home page under Mobile Services select Device Farm.
 6.	Create a new Project. Give it a name “re:Invent 2016”.
-7.	Under project “Intent 2016” click on “Create a new Run”.
+7.	Under project “re:Invent 2016” click on “Create a new Run”.
 8.	First we want to upload our iOS app. Click on the Android/Apple logo button.
 9.	Next click on the “Upload” button. This will open a Finder window, which will ask for the ipa file. Select our MySampleApp.ipa file.
 10.	Next click on “Next step”.
