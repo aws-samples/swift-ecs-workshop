@@ -16,36 +16,57 @@ class ProductListingViewController: UIViewController, NSURLConnectionDelegate {
     @IBOutlet weak var productWebView: UIWebView!
     @IBOutlet weak var productJson: UITextView!
     @IBOutlet weak var productCode: UILabel!
-
+    @IBOutlet weak var code: UILabel!
+    @IBOutlet weak var productDescription: UITextView!
+    @IBOutlet weak var productName: UITextView!
+    @IBOutlet weak var productPrice: UITextView!
     
     override func viewDidLoad() {
+
         super.viewDidLoad();
       
         let url = NSURL(string:"http://54.147.8.176/products")
         let data = NSData(contentsOfURL:url!)
         if data != nil {
+            print("-------------------")
+            print(String(data:data!, encoding:NSUTF8StringEncoding))
+            print("-------------------")
+            
+            do {
+                let json = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as! NSArray
+                
+                if let first = json.firstObject {
+                    
+                    if let jsonName = first["name"] as? String {
+                        print(jsonName)
+                        productName.text = jsonName;
+                    }
+                    
+                    if let jsonURL = first["image_url_1"] as? String {
+                        print(jsonURL)
+                        //var jsoURL = "http://media.performancebike.com/images/performance/products/product-hi/31-5335-BLK-EXTRA.JPG?resize=1500px:1500px&output-quality=100"
+                        loadImageFromUrl(jsonURL, view: productImageView)
+                    }
+                    
+                    if let jsonDescription = first["description"] as? String {
+                        print(jsonDescription)
+                        productDescription.text = jsonDescription;
+                    }
+                    
+                    if let jsonPrice = first["price"] as? Double {
+                        print(jsonPrice)
+                        productPrice.text = "Price: " + String(jsonPrice)
+                    }
+                    
+                }
+                
+            } catch let specialErr as NSError {
+                print("error serializing JSON: \(specialErr)")
+            }
+            
             productJson.text = String(data:data!, encoding:NSUTF8StringEncoding);
         }
 
-      
-        var swiftService = [String]()
-        
-        do {
-            let json = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments)
-            
-            if let products = json[""] as? [[String: AnyObject]] {
-                for product in products {
-                    if let url = json["url"] as? String {
-                        swiftService.append(url)
-                    }
-               }
-            }
-        } catch {
-            print("error serializing JSON: \(error)")
-        }
-        
-        print("--------------------------------------------")
-        print(swiftService)
         
         
    /*
@@ -64,35 +85,27 @@ class ProductListingViewController: UIViewController, NSURLConnectionDelegate {
                 "url":"http:\/\/54.147.8.176\/products\/1"
             }
         ]
-        
-        
-    			    //let fullURL = "http://54.152.155.191/products"
-        http://54.147.8.176/products
-        //let fullURL = "https://www.google.com"
-        let fullURL = "http://media.performancebike.com/images/performance/products/product-hi/31-2802-RED-SIDE.jpg?resize=1500px:1500px&output-quality=100"
-
-        productImageView.image = UIImage(named: "schwin")
-        
-        let url = NSURL(string: fullURL)
-        let requestObj = NSURLRequest(URL: url!)
-        //productWebView.loadData(data!, MIMEType: "application/txt", textEncodingName: "UTF-8", baseURL: nil);
-        //productWebView.loadRequest(requestObj)
-        productWebView.loadHTMLString(htmlString ,url)
+ 
 */
         
     }
-
     
-
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func loadImageFromUrl(url: String, view: UIImageView){
+        
+        // Create Url from string
+        let url = NSURL(string: url)!
+        let task = NSURLSession.sharedSession().dataTaskWithURL(url) { (responseData, responseUrl, error) -> Void in
+            if let data = responseData{
+                // execute in UI thread
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    view.image = UIImage(data: data)
+                })
+            }
+        }
+        
+        // Run task
+        task.resume()
     }
-    */
+    
 
 }

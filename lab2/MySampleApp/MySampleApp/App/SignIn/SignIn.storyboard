@@ -70,14 +70,14 @@
                                     </mask>
                                 </variation>
                             </button>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T6t-nK-GpM" userLabel="Left Horizontal Bar">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T6t-nK-GpM" userLabel="Left Horizontal Bar">
                                 <rect key="frame" x="20" y="195" width="232" height="1"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="ezJ-al-MBc"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mou-mq-q0x" userLabel="Right Horizontal Bar">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mou-mq-q0x" userLabel="Right Horizontal Bar">
                                 <rect key="frame" x="348" y="195" width="232" height="1"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>

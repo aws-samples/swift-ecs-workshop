@@ -156,7 +156,6 @@
 		B401C9795BDD89CB00000000 /* Demo */ = {
 			isa = PBXGroup;
 			children = (
-				E4DBD1971DB607520013D455 /* ProductListing */,
 				1DD70E291CBAA7C300000000 /* DemoFeature.swift */,
 				B401C9797C5AEA3300000000 /* UserIdentity */,
 			);
@@ -181,6 +180,8 @@
 				1DD70E2929D2C1C900000000 /* Images.xcassets */,
 				1DD70E29AD734B3900000000 /* Launch Screen.storyboard */,
 				1DD70E29049DAC6500000000 /* Main.storyboard */,
+				E4DBD1A31DB60C820013D455 /* ProductListing.storyboard */,
+				E4DBD1A51DB60D950013D455 /* ProductListingViewController.swift */,
 				1DD70E292B8F9BD700000000 /* MainViewController.swift */,
 				B401C9790444F97300000000 /* SignIn */,
 				B401C979FEF8915B00000000 /* SupportingFiles */,
@@ -252,15 +253,6 @@
 			);
 			name = SupportingFiles;
 			path = mysampleapp/app/supportingfiles;
-			sourceTree = "<group>";
-		};
-		E4DBD1971DB607520013D455 /* ProductListing */ = {
-			isa = PBXGroup;
-			children = (
-				E4DBD1A31DB60C820013D455 /* ProductListing.storyboard */,
-				E4DBD1A51DB60D950013D455 /* ProductListingViewController.swift */,
-			);
-			name = ProductListing;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -394,7 +386,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -458,7 +450,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

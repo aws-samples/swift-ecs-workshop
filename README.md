@@ -166,19 +166,22 @@ Request body:
 
 **Pre-requisites**
 1.	Xcode 7 or 8 installed
+
 2.	Apple ID logged in your Xcode
+
 3.	Make sure you can run any sample Swift app on a simulator.
+
 
 **Part 1 : Creating an app using Mobile Hub with AWS Cognito for User-sign in **
 
 1.	Go to the AWS console by opening http://aws.amazon.com in a web browser
 2.	In the list of service find “Mobile Hub”. Click on Mobile hub.
 3.	The welcome page for Mobile hub will show you an option to create a new project. Alternatively, if you have already use Mobile Hub it will show the list of projects that you had created.
-4.	Let us name the project “Intent 2016”.
+4.	Let us name the project “re:Invent 2016”.
 5.	Once you create the project the next page show a cards layout wherein you will see AWS services that can be configured and added to your app.
 6.	We want to add a simple login using Facebook to our sample application. We will be using AWS Cognito for this.
 7.	Click on User-sign in card.
-8.	You should see 3 options with Facebook, Google and Custom offered as choices. Select Facebook.
+8.	You should see 4 options with Facebook, Google, SAML and Custom offered as choices. Select Facebook.
 9.	If you click on the documentation column on the right side it will show you the instructions to enable Facebook developer account.
 10.	Follow the steps for enabling Facebook developer account.
 11.	Once Facebook developer account is activated we want to copy the App id of our sample application so that we can use Facebook login in our sample app.
@@ -188,13 +191,18 @@ Request body:
 15.	Download the app.
 
 **Part 2: Adding more UI and code to the downloaded app to enable listing a product listing.**
+
 1.	Open the downloaded app in Xcode.
+
 2.	Select iPhone 6s simulator as the device target
+
 3.	Run the app.
+
 4.	Once the app is up and running you will find that it has one existing option, which indicates the user sign in process through Cognito.
+
 5.	We want to add another option to the app main page. This page when clicked will show up the product listing. We will add the corresponding code to the web service, which will return a JSON data getting serialized to an object and display in this new page.
 
-6.	Download the zip package from https://github.com/awslabs/swift-ecs-workshop/tree/master/lab3/zipforlab3.zip” which contains the three files below:
+6.	Download the zip package from https://github.com/awslabs/swift-ecs-workshop/tree/master/lab2/zipforlab2.zip which contains the three files below:
 
 	ProductListing.storyboard
 
@@ -202,7 +210,7 @@ Request body:
 
 	MainViewController.swift
 
-7.	Copy ProductListing.storyboard and ProductListingViewController.swift
+7.	Open Finder and copy 2 new files ProductListing.storyboard and ProductListingViewController.swift from the unziped package
  to the sample you built using mobile hub under the following location:
 
 	MobileHub Sample Folder/MySampleApp/MySampleApp/ProductListingViewController.swift
@@ -238,11 +246,10 @@ Request body:
 
 ##Lab 3: Testing the app on Device Farm
 
-1.	Once you have successfully run the app we want to test the app on device farm.
-2.	First we want to retrieve the .ipa file of the app that we just built.
-3.	In Xcode, first build the app for a generic device type by selecting Produtct→Build
-4.	Here you may run in to signing issues where Xcode requires you to have a valid provisioning profile and signing identities in order to build an app that can be deployed on devices.  Make sure you have an Apple ID singed in your Xcode.
-5.	To resolve any code signing issues, make sure you have the following configuration if you are not an apple developer or do not have xcode setup to build apps.
+1. Once you have successfully run the app we want to test the app on device farm.
+2. First we want to retrieve the .ipa file of the app that we just built. As this process may not be seamless for everyone in the room given that you require an Apple Developer account and Xcode configured to do this we have provided a prebuilt IPA file which is exactly the same app that you build using Mobile Hub and modified in Lab 2.
+3. The prebuilt IPA can be found here https://github.com/awslabs/swift-ecs-workshop/tree/master/lab3/MySampleApp.ipa with the name "MySampleApp.ipa". We would recommend using this. If you have your Xcode configured to build IPA files you can follow step 4 through 10. For everyone else jump to step 11.
+4. Make sure you have the following configuration if you are not an apple developer or do not have xcode setup to build apps.
 
 	a.	Ensure that you have an Apple ID signed in your Xcode.
 
@@ -280,19 +287,25 @@ Request body:
 
 	r.	Select Release → Any iOS SDK → iOS Developer
 
-6.	This should generate a MySample.app file under Products folder.
-7.	Right click on the MySample.app file and select “Show in Finder”.
-8.	Create an empty folder and call it “Payload” (case-sensitive).
-9.	Copy the MySample.app file in the “Payload” folder.
-10.	Archive “Payload” folder and rename the zip file to Sample.ipa
-11.	We now have the ipa file which we will upload to AWS Device Farm and run tests against.
-12.	Open aws.amazon.com console.
-13.	On the console home page under Mobile Services select Device Farm.
-14.	Create a new Project. Give it a name “Intent 2016”.
-15.	Under project “Intent 2016” click on “Create a new Run”.
-16.	First we want to upload our iOS app. Click on the Android/Apple logo button.
-17.	Next click on the “Upload” button. This will open a Finder window, which will ask for the ipa file. Select our Sample.ipa file.
-18.	Next click on “Next step”.
+5.	This should generate a MySample.app file under Products folder.
+6.	Right click on the MySample.app file and select “Show in Finder”.
+7.	Create an empty folder and call it “Payload” (case-sensitive).
+8.	Copy the MySample.app file in the “Payload” folder.
+9.	Archive “Payload” folder and rename the zip file to Sample.ipa
+10.	We now have the ipa file which we will upload to AWS Device Farm and run tests against.
+11.	Open aws.amazon.com console.
+12.	On the console home page under Mobile Services select Device Farm.
+13.	Create a new Project. Give it a name “re:Invent 2016”.
+14.	Under project “Intent 2016” click on “Create a new Run”.
+15.	First we want to upload our iOS app. Click on the Android/Apple logo button.
+16.	Next click on the “Upload” button. This will open a Finder window, which will ask for the ipa file. Select our MySampleApp.ipa file.
+17.	Next click on “Next step”.
+18.	By default the test type selected will be “Built-in: Fuzz”. Click on “Next step”
+19.	On the Select devices page it will show the top pool of devices. We will work with this pool. Click on “Next Step”.
+20.	On the “Specify device state” page we do not want to change anything. Click on “Review and start run”.
+21.	The tests will run for around 15 mins.
+22.	Once the tests are finished you can view the detailed report of the test run.
+
 
 
 ##Lab 4: Enhance the backend api and deploy to Amazon ECS using CodeCommit and CodePipeline
