@@ -44,7 +44,7 @@ Also, change the permission on your keypair with the following command.
 Each of the labs in this workshop is an independent section and you may choose to do some or all of them, or in any order that you prefer.
 
 
-##Lab 1: Deploy a Swift backend API to Amazon ECS
+##Lab 1: Deploy a Swift API to Amazon ECS
 
 
 ###Launch the CloudFormation template
@@ -309,7 +309,7 @@ Request body:
 6.	Archive “Payload” folder and rename the zip file to Sample.ipa
 7.	We now have the ipa file which we will upload to AWS Device Farm and run tests against.
 
-##Lab 4: Enhance the backend api and deploy to Amazon ECS using CodeCommit and CodePipeline
+##Lab 4: Deploy to Amazon ECS using CodeCommit and CodePipeline
 
 **Note:** Use the Bastion host created in lab1 for connecting to CodeCommit repository below
 
@@ -323,14 +323,14 @@ In this lab, you will create an automated workflow that will provision, configur
 
 Follow the instructions below to Create and Connect to an AWS CodeCommit Repository. You may also refer to the instructions at AWS CodeCommit documentation
 
-1.	Go to AWS Console and select CodeCommit. Click **Create New repository** button.  Enter a unique repository name and a description ex. swift-product and click **Create repository**.
-	![]<https://git-codecommit.us-east-1.amazonaws.com/v1/repos/swift-product>
+1.	Go to AWS Console and select CodeCommit. Click **Create New repository** button.  Enter a unique repository name and a description ex. swift-product and click **Create repository**. You will get a URL to your CodeCommit repository similar to below
+	<https://git-codecommit.us-east-1.amazonaws.com/v1/repos/swift-product>
 
 2.	You can use https or ssh to connect to your CodeCommit repository. We’ll connect via SSH in this lab. The steps need initial set up for AWS CodeCommit and steps for Linux/MacOS is provided as below. For other platform, refer to this link
-	![]<http://docs.aws.amazon.com/codecommit/latest/userguide/how-to-connect.html>
-	* Create a new IAM user at IAM console. (Use your credentials from Lab1)
+	<http://docs.aws.amazon.com/codecommit/latest/userguide/how-to-connect.html>
+	* Create a new IAM user at IAM console. (Use your credentials from Lab1). Provide this user Programmatic access.
 	* Add the following managed policies for the IAM user.
-		> *  WSCodeCommitFullAccess
+		> *  AWSCodeCommitFullAccess
 		> *  AmazonEC2ContainerRegistryFullAccess
 		> *  AmazonEC2ContainerServiceFullAccess
 		> *  IAMReadOnlyAccess
@@ -338,62 +338,64 @@ Follow the instructions below to Create and Connect to an AWS CodeCommit Reposit
 
 	* On the Bastion host, open a terminal window on Bastion host and type
 
-			```
-				cd $HOME/.ssh
-				ssh-keygen
-			```
+
+			cd $HOME/.ssh
+			ssh-keygen
+
 
 	 When prompted, use a name like lab4codecommit_rsa and you can leave passphrase as blank. Hit enter.
 
-			```
-				cat lab4codecommit_rsa.pub
-			```
+
+			cat lab4codecommit_rsa.pub
+
 
 	* Go to IAM, select the user you have created and click on Security Credentials tab.
 		* Click Upload SSH Public key button. Copy the contents from file ‘lab4codecommit_rsa.pub’ in the text box and save.
 
 	* Go back to terminal and type
-		```
+
 			touch config
 			chmod 600 config
 			sudo vim config  
-		```
+
 
 	 and paste the following
 	 **Note:** Ensure that this is the first entry in the config file
 
-		```
-			Host git-codecommit.*.amazonaws.com
-			User <SSH_KEY_ID_FROM_IAM>  Value for the SSH key id from Step c above
+
+			Host git-codecommit.\*.amazonaws.com
+			User <SSH_KEY_ID_FROM_IAM>  Value for the SSH key id from the user you created in IAM when you uploaded the public key.
 			IdentityFile ~/.ssh/lab4codecommit_rsa
-		```
+
   * Verify your SSH connection. Type the following and confirm that you get a successful response.
 
-			```
+
 				ssh git-codecommit.us-east-1.amazonaws.com
-			```
+
 
 #### Step 2: Commit the Source Code and Configuration files into your CodeCommit repository
 
 1.	On the Bastion host, clone a local copy of CodeCommt repo you created earlier in your home directory.
-	```
-		git clone ssh://git-codecommit.us-east-1.amazonaws.com/v1/repos/swift-product
-	```
-This will create a folder “swift-product” in your path where you executed the git clone command.
 
-Copy the contents of lab4/swift-products-example/ directory into this new folder. The contents provide from git clone ssh://git.amazon.com/pkg/Amazon-ecs-swift-workshop
+		cd ~
+		git clone ssh://git-codecommit.us-east-1.amazonaws.com/v1/repos/<your CodeCommit Repo name>
 
-		```
-			~/lab4/swift-products-example$ cp -r * ~/swift-product/
-		```
+
+	This will create a folder as the same name as <your CodeCommit Repo name> in your path where you executed the git clone command.
+
+	Copy the contents of **lab4/swift-products-example** directory into this new folder. The contents provide from `git clone https://github.com/awslabs/swift-ecs-workshop.git`
+
+			cd ~/swift-ecs-workshop/lab4/swift-products-example
+			cp -r * ~/<your CodeCommit Repo name>/
+
 
 2.	Commit all of the copied contents into your CodeCommit repository.
 
-		```
 			git add --all
 		 	git commit -m "Initial Commit"
-			git push origin master	-- Tip: Verify the file .git/config for remote==”origin” and branch==”master”
-		```
+			git push origin master	
+			
+	***Tip: Verify the file .git/config for remote==”origin” and branch==”master”***
 
 You are using this CodeCommit repository to store you swift application code along with docker configuration files.  In Lab1, you have built a docker image and pushed the image to ECS.
 
@@ -405,18 +407,19 @@ Template is also provided at
 
 The template accepts the following parameters:
 
+> *  KeyName xxKeyPair <- Key pair name for SSH access
+> *  YourIP 0.0.0.0/0 <- Provide your public IP or allow all
 > *  AppName ecs-swift-app <- Name of your application
 > *  DesiredCapacity1 <- Provide appropriate desired capacity
 > *  ECSCFNURL https://s3.amazonaws.com/ecs-swift-bootcamp/swift-on-ecs-CD.json <- S3 link to this CloudFormation template
-> *  ECSRepoName ecs-swift-bootcamp-ecr-repo <- Name of ECR repo where ECS image is stored
+> *  ECSRepoName ecs-swift-bootcamp-ecr-repo <- Name of ECR repo from lab 1 where ECS image is stored
 > *  ImageTag latest <- Image tag
 > *  InstanceType t2.micro
-> *  KeyName xxKeyPair <- Key pair name for SSH access
 > *  MaxSize 1 <-  Desired max size
 > *  RepositoryBranch master
 > *  RepositoryName swift-product <- Name of the CodeCommit repository
 > *  SSHLocation 0.0.0.0/0
-> *  YourIP 0.0.0.0/0 <- Provide your public IP or allow all
+
 
 The stack takes approximately 15 minutes to create all resources.
 
@@ -432,39 +435,39 @@ The template creates a number of AWS resources to facilitate the automated workf
 > *  **ECS Cluster** – “An ECS cluster is a logical grouping of container instances that you can place tasks on.”
 > *  **ECS Service** – An ECS service, you can run a specific number of instances of a task definition simultaneously in an ECS cluster
 > *  **ECS Task Definition** – A task definition is the core resource within ECS. This is where you define which Docker images to run, CPU/Memory, ports, commands and so on.
-> *  **Elastic Load Balancer** – The ELB provides the endpoint for the application. The ELB dynamically determines which EC2 instance in the cluster is serving the running ECS tasks at any given time.
+> *  **Application Load Balancer** – The ALB provides the endpoint for the application. The ALB dynamically determines which EC2 instance in the cluster is serving the running ECS tasks at any given time.
 > *  **RDS MySQL instance** – Contents the product details for the Swift application package
 
 A code change committed to CodeCommit repository will trigger image creation, create a task definition, create the service and run the task in an auto-scaled pool of containers running behind an elastic load balancer.
 
 #### Step 4: Configure your swift package to connect with RDS containing product data.
 Open the following file
+	
+		cd ~/swift-ecs-workshop/lab4/swift-products-example/Config/secrets
+		vi mysql.json
 
-		```
-			~/swift-product/Config/secrets$ cat mysql.json
-		```
 
 and update host parameter with RDS endpoint that has been created for you in CloudFormation template ( Check RDS Console for endpoint)
 
-		```
-			{
-			  "host": "<Your RDS endpoint here, do not include port number>",
-			  "user": "admin",
-			  "password": "password",
-			  "database": "testDB",
-			  "port": "3306",
-			  "encoding": "utf8"
-			}
-		```
+
+		{
+		"host": "<Your RDS endpoint here, do not include port number>",
+		"user": "admin",
+		"password": "password",
+		"database": "testDB",
+		"port": "3306",
+		"encoding": "utf8"
+		}
+
 
 Commit the changes to your CodeCommit repo
 
-		```
-			git add --all
-	  		git status
-	  		git commit -m "db change"
-	    		git push origin master
-		```
+
+		git add --all
+	  	git status
+	  	git commit -m "db change"
+	    git push origin master
+
 
 Once the changes are checked in, verify that your CodePipeline is executing, creating a new Docker image and deploying on ECS.
 
@@ -484,6 +487,7 @@ You should see the Vapor homepage.
 
 Check out the product page by adding “/products” to the URL above.
 
+
 ###Cleanup
 
 * **Reset Steps**
@@ -493,9 +497,3 @@ Check out the product page by adding “/products” to the URL above.
 * **Removal Steps**
 	1.	Scale the service down to zero running tasks.
 	2.	Delete the CloudFormation stack.
-
-
-
-## Appendix
-
-> *Add additional idea for customers to take this further*
