@@ -387,6 +387,7 @@ Follow the instructions below to Create and Connect to an AWS CodeCommit Reposit
 
 			cd ~/swift-ecs-workshop/lab4/swift-products-example
 			cp -r * ~/<your CodeCommit Repo name>/
+			cd  ~/<your CodeCommit Repo name>
 
 
 2.	Commit all of the copied contents into your CodeCommit repository.
@@ -466,7 +467,7 @@ Commit the changes to your CodeCommit repo
 		git add --all
 	  	git status
 	  	git commit -m "db change"
-	    git push origin master
+	    	git push origin master
 
 
 Once the changes are checked in, verify that your CodePipeline is executing, creating a new Docker image and deploying on ECS.
