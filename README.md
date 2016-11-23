@@ -444,7 +444,7 @@ A code change committed to CodeCommit repository will trigger image creation, cr
 #### Step 4: Configure your swift package to connect with RDS containing product data.
 Open the following file
 	
-		cd ~/swift-ecs-workshop/lab4/swift-products-example/Config/secrets
+		cd ~/<your code commit repo name>/Config/secrets
 		vi mysql.json
 
 
