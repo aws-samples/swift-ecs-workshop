@@ -9,7 +9,7 @@
 
   > *In this lab you will test the mobile App developed in Lab 3 using Amazon Deveice Farm.*
 
-* **Lab 4: Enhance the backend api and deploy to Amazon ECS using CodeCommit and CodePipeline**  
+* **Lab 4: Deploy to Amazon ECS using CodeCommit and CodePipeline**  
 
   >*In this lab, you will utilize enahance the product api developed in lab 1, and commit it to AWS CodeCommit and then deploy it on Amazon ECS using Code Pipeline and CloudFormation*
 
