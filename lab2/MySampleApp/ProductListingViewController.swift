@@ -25,7 +25,7 @@ class ProductListingViewController: UIViewController, NSURLConnectionDelegate {
 
         super.viewDidLoad();
       
-        let url = NSURL(string:"http://54.147.8.176/products")
+        let url = NSURL(string:"http://<your container ip>/products")
         let data = NSData(contentsOfURL:url!)
         if data != nil {
             print("-------------------")
