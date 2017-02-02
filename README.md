@@ -172,9 +172,9 @@ Request body:
 3.	Make sure you can run any sample Swift app on a simulator.
 
 
-**Part 1 : Creating an app using Mobile Hub with AWS Cognito for User-sign in **
+**Part 1 : Creating an app using Mobile Hub with AWS Cognito for User-sign in**
 
-1.	Go to the AWS console by opening http://aws.amazon.com in a web browser
+1.	Go to the AWS console by opening http://aws.amazon.com in a web browser, and **verify** that you are in the N. Virginia region at the top right corner of the page.
 2.	In the list of service find “Mobile Hub”. Click on Mobile hub.
 3.	The welcome page for Mobile hub will show you an option to create a new project. Alternatively, if you have already use Mobile Hub it will show the list of projects that you had created.
 4.	Let us name the project “reInvent 2016”.
@@ -192,7 +192,8 @@ Request body:
 
 **Part 2: Adding more UI and code to the downloaded app to enable listing a product listing.**
 
-1.	Open the downloaded app in Xcode.
+1.	Open the downloaded app in Xcode. **DO NOT** agree to convert the project if Xcode prompts you to do so.
+
 
 2.	Select iPhone 6s simulator as the device target
 
@@ -237,14 +238,19 @@ Request body:
 
 12. Enable the application to allow communication via HTTP
 	a. In the left pane, verify that the Project Navigator is selected
+
 	b. Click the top-level MySampleApp project.
+
 	c. In the center pane, click Info and scroll to App Transport Security Settings
+
 	d. Click on App Transport Security Settings and click the + sign.
+
 	e. Select Allow Arbitrary Loads and change the Boolean value to YES
+
 Reference this screenshot for further detail:
 ![Allow HTTP Communication](/lab2/allow-arbitrary-loads.png)
 
-13. Change the simulator model in the top panel to iPhone 6s.
+13. Change the simulator model in the top panel to **iPhone 6s**.
 
 14. Save the project.
 
