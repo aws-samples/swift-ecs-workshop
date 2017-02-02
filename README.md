@@ -250,15 +250,13 @@ Request body:
 Reference this screenshot for further detail:
 ![Allow HTTP Communication](/lab2/allow-arbitrary-loads.png)
 
-13. Change the simulator model in the top panel to **iPhone 6s**.
+13. Save the project.
 
-14. Save the project.
+14. Build the project.
 
-15. Build the project.
+15. In the app, first sign-in using Facebook using the “Sign-in” button on the top right hand corner.
 
-16. In the app, first sign-in using Facebook using the “Sign-in” button on the top right hand corner.
-
-17. Once you are successfully signed in, go back to main page in the app and click on “Access Swift DB”.
+16. Once you are successfully signed in, go back to main page in the app and click on “Access Swift DB”.
 
 ##Lab 3: Testing the app on Device Farm
 
