@@ -172,19 +172,19 @@ Request body:
 3.	Make sure you can run any sample Swift app on a simulator.
 
 
-**Part 1 : Creating an app using Mobile Hub with AWS Cognito for User-sign in **
+**Part 1 : Creating an app using Mobile Hub with AWS Cognito for User-sign in**
 
-1.	Go to the AWS console by opening http://aws.amazon.com in a web browser
+1.	Go to the AWS console by opening http://aws.amazon.com in a web browser, and **verify** that you are in the N. Virginia region at the top right corner of the page.
 2.	In the list of service find “Mobile Hub”. Click on Mobile hub.
 3.	The welcome page for Mobile hub will show you an option to create a new project. Alternatively, if you have already use Mobile Hub it will show the list of projects that you had created.
-4.	Let us name the project “re:Invent 2016”.
+4.	Let us name the project “reInvent 2016”.
 5.	Once you create the project the next page show a cards layout wherein you will see AWS services that can be configured and added to your app.
 6.	We want to add a simple login using Facebook to our sample application. We will be using AWS Cognito for this.
 7.	Click on User-sign in card.
 8.	You should see 4 options with Facebook, Google, SAML and Custom offered as choices. Select Facebook.
-9.	If you click on the documentation column on the right side it will show you the instructions to enable Facebook developer account.
-10.	Follow the steps for enabling Facebook developer account.
-11.	Once Facebook developer account is activated we want to copy the App id of our sample application so that we can use Facebook login in our sample app.
+9.	If you expand the documentation column using the blue arrow on the right side of the page, it will show you the instructions to enable Facebook login.
+10.	Follow the steps to enable a Facebook developer account, to create a Facebook app, and to enable your iOS app to login to Facebook.
+11.	Once the Facebook developer account is activated we want to copy the App id of our sample application so that we can use Facebook login in our sample app.
 12.	Paste the App id in the AWS Mobile Hub console page where we let off.
 13.	 Next on the left hand side menu, click on the “Integrate” option.
 14.	The page should show an option for us to “Download the sample app”
@@ -192,7 +192,8 @@ Request body:
 
 **Part 2: Adding more UI and code to the downloaded app to enable listing a product listing.**
 
-1.	Open the downloaded app in Xcode.
+1.	Open the downloaded app in Xcode. **DO NOT** agree to convert the project if Xcode prompts you to do so.
+
 
 2.	Select iPhone 6s simulator as the device target
 
@@ -202,7 +203,7 @@ Request body:
 
 5.	We want to add another option to the app main page. This page when clicked will show up the product listing. We will add the corresponding code to the web service, which will return a JSON data getting serialized to an object and display in this new page.
 
-6.	Download the zip package from https://github.com/awslabs/swift-ecs-workshop/tree/master/lab2/zipforlab2.zip which contains the three files below:
+6.	Download the zip package from [GitHub](https://github.com/awslabs/swift-ecs-workshop/tree/master/lab2/zipforlab2.zip) which contains the three files below:
 
 	ProductListing.storyboard
 
@@ -210,14 +211,14 @@ Request body:
 
 	MainViewController.swift
 
-7.	Open Finder and copy 2 new files ProductListing.storyboard and ProductListingViewController.swift from the unziped package
- to the sample you built using mobile hub under the following location:
+7.	Open Finder and copy ProductListing.storyboard and ProductListingViewController.swift from the unzipped package
+ to the sample application you downloaded from Mobile Hub under the following location:
 
 	MobileHub Sample Folder/MySampleApp/MySampleApp/ProductListingViewController.swift
 
 	MobileHub Sample Folder/MySampleApp/MySampleApp/ProductListing.storyboard
 
-8. Overwrite MainViewController.swift by copying it from the unziped package and pasting it under mobile hub sample app at the following location:
+8. Overwrite MainViewController.swift by copying it from the unzipped package and pasting it under mobile hub sample app at the following location:
 
 	MobileHub Sample Folder/MySampleApp/MySampleApp/App/MainViewController.swift
 
@@ -233,14 +234,27 @@ Request body:
 
 10. Open ProductListingViewController.swift
 
-11. Search for “let url” and replace the first instance of existing URL with the URL for your service that your built in lab 1 and 2.
-12. Save the project.
+11. Search for “let url” and replace the first instance of existing URL with the URL for your service that you built in lab 1 and 2.
 
-13. Build the project.
+12. Enable the application to allow communication via HTTP
+	a. In the left pane, verify that the Project Navigator is selected
 
-14. Run it for iPhone 6s.
+	b. Click the top-level MySampleApp project.
 
-15. In the app, first sign in using Facebook using the “Sign-in” button on the top right hand corner.
+	c. In the center pane, click Info and scroll to App Transport Security Settings
+
+	d. Click on App Transport Security Settings and click the + sign.
+
+	e. Select Allow Arbitrary Loads and change the Boolean value to YES
+
+Reference this screenshot for further detail:
+![Allow HTTP Communication](/lab2/allow-arbitrary-loads.png)
+
+13. Save the project.
+
+14. Build the project.
+
+15. In the app, first sign-in using Facebook using the “Sign-in” button on the top right hand corner.
 
 16. Once you are successfully signed in, go back to main page in the app and click on “Access Swift DB”.
 
