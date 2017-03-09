@@ -1,0 +1,13 @@
+version: 0.1
+
+phases:
+  build:
+    commands:
+      - docker build -t swiftrepo --build-arg SWIFT_VERSION=3.0-RELEASE  .
+
+
+  post_build:
+    commands:
+      - eval `aws ecr get-login --region us-east-1`
+      - docker tag swiftrepo:latest <youraccountid>.dkr.ecr.us-east-1.amazonaws.com/swiftrepo:latest
+      - docker push <youraccountid>.dkr.ecr.us-east-1.amazonaws.com/swiftrepo:latest
