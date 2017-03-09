@@ -363,7 +363,7 @@ Follow the instructions below to Create and Connect to an AWS CodeCommit Reposit
 	 **Note:** Ensure that this is the first entry in the config file
 
 
-			Host git-codecommit.\*.amazonaws.com
+			Host git-codecommit.*.amazonaws.com
 			User <SSH_KEY_ID_FROM_IAM>  Value for the SSH key id from the user you created in IAM when you uploaded the public key.
 			IdentityFile ~/.ssh/lab4codecommit_rsa
 
