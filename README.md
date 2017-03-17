@@ -323,6 +323,7 @@ Reference this screenshot for further detail:
 6.	Archive “Payload” folder and rename the zip file to Sample.ipa
 7.	We now have the ipa file which we will upload to AWS Device Farm and run tests against.
 
+
 ##Lab 4: Deploy to Amazon ECS using CodeCommit and CodePipeline
 
 **Note:** Use the Bastion host created in lab1 for connecting to CodeCommit repository below
@@ -405,8 +406,10 @@ Follow the instructions below to Create and Connect to an AWS CodeCommit Reposit
 			cd  ~/swift-product
 
 2. Change the buildspec.yml file to include your AWS account number.
-	<your account number>.dkr.ecr.us-east-1.amazonaws.com/swiftrepo:latest
-You can find your AWS account number on the right hand top corner of your AWS console.
+
+		<your account number>.dkr.ecr.us-east-1.amazonaws.com/swiftrepo:latest
+
+	You can find your AWS account number on the right hand top corner of your AWS console.
 
 3.	Commit all of the copied contents into your CodeCommit repository.
 
