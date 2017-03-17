@@ -44,10 +44,10 @@ Also, change the permission on your keypair with the following command.
 Each of the labs in this workshop is an independent section and you may choose to do some or all of them, or in any order that you prefer.
 
 
-##Lab 1: Deploy a Swift API to Amazon ECS
+## Lab 1: Deploy a Swift API to Amazon ECS
 
 
-###Launch the CloudFormation template
+### Launch the CloudFormation template
 
 
 1. Deploy the AWS CloudFormation template into your AWS account.
@@ -162,7 +162,7 @@ Request body:
 	"image_url_2" : "https://d0.awsstatic.com/Test%20Images/Kate%20Test%20Images/ECS_Header.png"
   	}]`
 
-##Lab 2: Create a Swift mobile app using Mobile Hub and Amazon Cognito
+## Lab 2: Create a Swift mobile app using Mobile Hub and Amazon Cognito
 
 **Pre-requisites**
 1.	Xcode 7 or 8 installed
@@ -258,7 +258,7 @@ Reference this screenshot for further detail:
 
 16. Once you are successfully signed in, go back to main page in the app and click on “Access Swift DB”.
 
-##Lab 3: Testing the app on Device Farm
+## Lab 3: Testing the app on Device Farm
 
 1. Once you have successfully run the app we want to test the app on device farm.
 2. First we want to retrieve the .ipa file of the app that we just built. As this process may not be seamless for everyone in the room given that you require an Apple Developer account and Xcode configured to do this we have provided a prebuilt IPA file which is exactly the same app that you build using Mobile Hub and modified in Lab 2.
@@ -325,7 +325,7 @@ Reference this screenshot for further detail:
 
 
 
-##Lab 4: Deploy to Amazon ECS using CodeCommit and CodePipeline
+## Lab 4: Deploy to Amazon ECS using CodeCommit and CodePipeline
 
 **Note:** Use the Bastion host created in lab1 for connecting to CodeCommit repository below
 
