@@ -490,7 +490,7 @@ Commit the changes to your CodeCommit repo
 		git add --all
 	  	git status
 	  	git commit -m "db change"
-	    git push origin master
+	   	git push origin master
 
 
 Once the changes are checked in, verify that your CodePipeline is executing, creating a new Docker image and deploying on ECS.
