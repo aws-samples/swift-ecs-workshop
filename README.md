@@ -324,6 +324,7 @@ Reference this screenshot for further detail:
 7.	We now have the ipa file which we will upload to AWS Device Farm and run tests against.
 
 
+
 ##Lab 4: Deploy to Amazon ECS using CodeCommit and CodePipeline
 
 **Note:** Use the Bastion host created in lab1 for connecting to CodeCommit repository below
