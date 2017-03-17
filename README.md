@@ -497,7 +497,7 @@ Once the changes are checked in, verify that your CodePipeline is executing, cre
 
 
 
-###Cleanup
+### Cleanup
 
 * **Reset Steps**
 	1.	Scale the service down to zero running tasks.
