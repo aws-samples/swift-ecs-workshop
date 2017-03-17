@@ -24,6 +24,8 @@ To deploy a Swift web application we utilize Vapor which is a Web Framework for 
 
 In this workshop , you will deploy a sample Swift backend api commiting data to Amazon RDS, enhance the API to your needs, develop a mobile app using Amazon Mobile Hub, Amazon Cognito and finally test it using Device Farm.
 
+![](https://s3-us-west-2.amazonaws.com/es-swift-bootcamp/image/swift-ecs-workshop.png)
+
 At the end of this workshop, you will know how to develop and deploy a complete Swift Stack on AWS.
 
 ### Required:
