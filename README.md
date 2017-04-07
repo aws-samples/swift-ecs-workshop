@@ -108,7 +108,7 @@ The CloudFormation stack outputs a few commands that you’ll need during the de
 6. 	 Go to AWS ECS Console, and Create a Task Definition
 
 	*	Task Definition Name: `swift-on-ecs-task`
-	*	Add Container
+	*	Ignore Task Role, Network Mode and click the Add Container button.
 		*	Image: `{{RepositoryURL}}:latest` . you can find the RepositoryURL from Cloudformation outputs
 		*	Maximum memory: 300
 		*	Host port: 80
