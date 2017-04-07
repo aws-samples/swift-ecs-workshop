@@ -109,7 +109,8 @@ The CloudFormation stack outputs a few commands that you’ll need during the de
 
 	*	Task Definition Name: `swift-on-ecs-task`
 	*	Ignore Task Role, Network Mode and click the Add Container button.
-		*	Image: `{{RepositoryURL}}:latest` . you can find the RepositoryURL from Cloudformation outputs
+		*	Container name: `swift`
+		*	Image: `{{RepositoryURL}}:latest`. you can find the RepositoryURL from Cloudformation outputs
 		*	Maximum memory: 300
 		*	Host port: 80
 		*	Container port: 8080
