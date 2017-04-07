@@ -41,7 +41,7 @@ Also, change the permission on your keypair with the following command.
 `chmod 400 <your keypair>`
 
 ### Labs
-** Please lauch in N.Virginia **
+** Please launch in N.Virginia **
 
 Each of the labs in this workshop is an independent section and you may choose to do some or all of them, or in any order that you prefer.
 
