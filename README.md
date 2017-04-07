@@ -99,7 +99,7 @@ The CloudFormation stack outputs a few commands that you’ll need during the de
 	* Retrieve the Docker login command
 	`aws ecr get-login --region us-east-1`
 
-	* Run the output of the previous command to log into Docker
+	* Run the output of the previous command to log into Docker. You might see a warning about a deprecated flag. This should be no cause for concern as long as you see the "Login Succeeded." message.
 
 	*	Tag the image using the `{{TagPreBuiltImage}}` from Cloudformation outputs.
 
