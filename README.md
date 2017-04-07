@@ -125,6 +125,7 @@ The CloudFormation stack outputs a few commands that you’ll need during the de
 	*	Cluster: You can find the cluster name in CloudFormation, Resources tab (ECSCluster).
 	*	Service name: `swift-on-ecs-service`
 	*  Number of tasks : 1
+	* You can leave the rest as-is.
 
 
 **LAB 1 COMPLETE**
