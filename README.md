@@ -122,6 +122,7 @@ The CloudFormation stack outputs a few commands that you’ll need during the de
 7.	Create a Service by clicking on the Action's Button -> Create Service
 
 	*	Task Definition: `swift-on-ecs-task:1`
+	*	Cluster: You can find the cluster name in CloudFormation, Resources tab (ECSCluster).
 	*	Service name: `swift-on-ecs-service`
 	*  Number of tasks : 1
 
