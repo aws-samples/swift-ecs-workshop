@@ -87,14 +87,13 @@ The CloudFormation stack outputs a few commands that you’ll need during the de
 2. Clone the repo provided from *https://github.com/awslabs/swift-ecs-workshop* on the bastion instance using the command
 `git clone https://github.com/awslabs/swift-ecs-workshop`
 
-3. Change directory to  swift-ecs-workshop/lab1/swift-product/
+3. Change directory to swift-ecs-workshop/lab1/swift-product/
 
 4. Modify the **Config/secrets/mysql.json** file host to your Database instance endpoint from the cloudformation output.
 
 5.	Build, tag, and push a Docker image to ECR
 
-	* Go to the bastion host terminal you ssh'd in Step (1)
-	* Build a Docker image
+	* Still in swift-ecs-workshop/lab1/swift-product/, build a Docker image
 		```docker build -t swift-on-ecs-prebuilt --build-arg SWIFT_VERSION=3.0-RELEASE . ```
 
 	* Retrieve the Docker login command
