@@ -41,7 +41,7 @@ Also, change the permission on your keypair with the following command.
 `chmod 400 <your keypair>`
 
 ### Labs
-** Please lauch in N.Virginia **
+** Please launch in N.Virginia **
 
 Each of the labs in this workshop is an independent section and you may choose to do some or all of them, or in any order that you prefer.
 
@@ -87,20 +87,19 @@ The CloudFormation stack outputs a few commands that you’ll need during the de
 2. Clone the repo provided from *https://github.com/awslabs/swift-ecs-workshop* on the bastion instance using the command
 `git clone https://github.com/awslabs/swift-ecs-workshop`
 
-3. Change directory to  swift-ecs-workshop/lab1/swift-product/
+3. Change directory to swift-ecs-workshop/lab1/swift-product/
 
 4. Modify the **Config/secrets/mysql.json** file host to your Database instance endpoint from the cloudformation output.
 
 5.	Build, tag, and push a Docker image to ECR
 
-	* Go to the bastion host terminal you ssh'd in Step (1)
-	* Build a Docker image
+	* Still in swift-ecs-workshop/lab1/swift-product/, build a Docker image
 		```docker build -t swift-on-ecs-prebuilt --build-arg SWIFT_VERSION=3.0-RELEASE . ```
 
 	* Retrieve the Docker login command
 	`aws ecr get-login --region us-east-1`
 
-	* Run the output of the previous command to log into Docker
+	* Run the output of the previous command to log into Docker. You might see a warning about a deprecated flag. This should be no cause for concern as long as you see the "Login Succeeded." message.
 
 	*	Tag the image using the `{{TagPreBuiltImage}}` from Cloudformation outputs.
 
@@ -109,8 +108,9 @@ The CloudFormation stack outputs a few commands that you’ll need during the de
 6. 	 Go to AWS ECS Console, and Create a Task Definition
 
 	*	Task Definition Name: `swift-on-ecs-task`
-	*	Add Container
-		*	Image: `{{RepositoryURL}}:latest` . you can find the RepositoryURL from Cloudformation outputs
+	*	Ignore Task Role, Network Mode and click the Add Container button.
+		*	Container name: `swift`
+		*	Image: `{{RepositoryURL}}:latest`. you can find the RepositoryURL from Cloudformation outputs
 		*	Maximum memory: 300
 		*	Host port: 80
 		*	Container port: 8080
@@ -122,8 +122,10 @@ The CloudFormation stack outputs a few commands that you’ll need during the de
 7.	Create a Service by clicking on the Action's Button -> Create Service
 
 	*	Task Definition: `swift-on-ecs-task:1`
+	*	Cluster: You can find the cluster name in CloudFormation, Resources tab (ECSCluster).
 	*	Service name: `swift-on-ecs-service`
 	*  Number of tasks : 1
+	* You can leave the rest as-is and hit the Create Service button.
 
 
 **LAB 1 COMPLETE**
