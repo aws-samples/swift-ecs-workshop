@@ -153,6 +153,8 @@ Request body:
 
 > **Output**: Response code: 200
 
+For example, if you are going to run the above with `curl` it would look like this: `curl -H "Content-Type: application/json" -X POST -d '{"name" : "testproduct", "description" : "This is a testproduct", "price" : 20.50, "count" : 5, "image_url_1" : "https://d0.awsstatic.com/Test%20Images/Kate%20Test%20Images/ECS_Header.png", "image_url_2" : "https://d0.awsstatic.com/Test%20Images/Kate%20Test%20Images/ECS_Header.png"}'`
+
 3. Run GET **http://cluster:instance:ip/products** from the RESTClient.
 
 **Output** :
