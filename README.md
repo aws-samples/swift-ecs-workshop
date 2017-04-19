@@ -256,7 +256,7 @@ Reference this screenshot for further detail:
 
 12. Save the project.
 
-13. Build the project.
+13. Build the project by clicking on Product \ Build in the menu.
 
 14. In the app, first sign-in using Facebook using the “Sign-in” button on the top right hand corner.
 
