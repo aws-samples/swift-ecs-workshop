@@ -232,7 +232,7 @@ We want to add another option to the app main page. When clicked, it will show t
 
 	a. In the left pane, make sure you have selected the folder icon, right click on MySampleApp→App and choose “Add Files to MySampleApp”.
 
-	b. Choose ProductListing.storyboard and ProductListingViewController.swift.    
+	b. Navigate to the relevant folder and choose ProductListing.storyboard and ProductListingViewController.swift.    
 
 	c. Check “Copy items if needed”.
 
