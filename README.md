@@ -183,7 +183,7 @@ For example, if you are going to run the above with `curl` it would look like th
 1.	Go to the AWS console by opening http://aws.amazon.com in a web browser, and **verify** that you are in the N. Virginia region at the top right corner of the page.
 2.	In the list of service find “Mobile Hub”. Click on Mobile hub.
 3.	The welcome page for Mobile hub will show you an option to create a new project. Alternatively, if you have already use Mobile Hub it will show the list of projects that you had created.
-4.	Give this project a cool name.
+4.	Give this project a cool name. You will have to tick the 'Allows AWS Mobile Hub to administer resources on my behalf.' line.
 5.	Once you create the project the next page show a cards layout wherein you will see AWS services that can be configured and added to your app.
 6.	We want to add a simple login using Facebook to our sample application. We will be using AWS Cognito for this.
 7.	Click on User-sign in card.
