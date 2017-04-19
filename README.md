@@ -207,7 +207,7 @@ For example, if you are going to run the above with `curl` it would look like th
 
 4.	Once the app is up and running you will find that it has one existing option, which indicates the user sign in process through Cognito.
 
-5.	We want to add another option to the app main page. When clicked, it will show the product listing. We will add the corresponding code to the web service, which will return a JSON data getting serialized to an object and display in this new page.
+We want to add another option to the app main page. When clicked, it will show the product listing. We will add the corresponding code to the web service, which will return a JSON data getting serialized to an object and display in this new page.
 
 6.	Download the zip package from [GitHub](https://github.com/awslabs/swift-ecs-workshop/tree/master/lab2/zipforlab2.zip) which contains the three files below:
 
