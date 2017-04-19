@@ -228,9 +228,9 @@ We want to add another option to the app main page. When clicked, it will show t
 
 	MobileHub Sample Folder/MySampleApp/MySampleApp/App/MainViewController.swift
 
-8. Open Xcode again to add files to your project.
+8. Go back to Xcode to add files to your project.
 
-	a. Right click on MySampleApp→App and choose “Add Files to MySampleApp”.
+	a. In the left pane, make sure you have selected the folder icon, right click on MySampleApp→App and choose “Add Files to MySampleApp”.
 
 	b. Choose ProductListing.storyboard and ProductListingViewController.swift.    
 
