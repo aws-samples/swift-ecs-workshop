@@ -11,7 +11,7 @@
 
 * **Lab 4: Deploy to Amazon ECS using CodeCommit and CodePipeline**  
 
-  >*In this lab, you will utilize enahance the product api developed in lab 1, and commit it to AWS CodeCommit and then deploy it on Amazon ECS using Code Pipeline and CloudFormation*
+  >*In this lab, you will enhance the product api developed in lab 1, and commit it to AWS CodeCommit and then deploy it on Amazon ECS using Code Pipeline and CloudFormation*
 
 
 ## Deploy a Swift web application on Amazon ECS Workshop
@@ -207,7 +207,7 @@ For example, if you are going to run the above with `curl` it would look like th
 
 4.	Once the app is up and running you will find that it has one existing option, which indicates the user sign in process through Cognito.
 
-5.	We want to add another option to the app main page. This page when clicked will show up the product listing. We will add the corresponding code to the web service, which will return a JSON data getting serialized to an object and display in this new page.
+5.	We want to add another option to the app main page. When clicked, it will show the product listing. We will add the corresponding code to the web service, which will return a JSON data getting serialized to an object and display in this new page.
 
 6.	Download the zip package from [GitHub](https://github.com/awslabs/swift-ecs-workshop/tree/master/lab2/zipforlab2.zip) which contains the three files below:
 
