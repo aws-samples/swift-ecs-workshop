@@ -230,7 +230,7 @@ We want to add another option to the app main page. When clicked, it will show t
 
 8. Go back to Xcode to add files to your project.
 
-	a. In the left pane, make sure you have selected the folder icon, right click on MySampleApp→App and choose “Add Files to MySampleApp”.
+	a. In the left pane, make sure you have selected the Project Navigator (folder icon), right click on MySampleApp→App and choose “Add Files to MySampleApp”.
 
 	b. Navigate to the relevant folder and choose ProductListing.storyboard and ProductListingViewController.swift.    
 
@@ -243,15 +243,13 @@ We want to add another option to the app main page. When clicked, it will show t
 10. Search for “let url” and replace the first instance of existing URL with the URL for your service that you built in lab 1 and 2.
 
 11. Enable the application to allow communication via HTTP
-	a. In the left pane, verify that the Project Navigator is selected
+	a. Click the top-level MySampleApp project.
 
-	b. Click the top-level MySampleApp project.
+	b. In the center pane, click Info and scroll to App Transport Security Settings
 
-	c. In the center pane, click Info and scroll to App Transport Security Settings
+	c. Click on App Transport Security Settings and click the + sign.
 
-	d. Click on App Transport Security Settings and click the + sign.
-
-	e. Select Allow Arbitrary Loads and change the Boolean value to YES
+	d. Select Allow Arbitrary Loads and change the Boolean value to YES
 
 Reference this screenshot for further detail:
 ![Allow HTTP Communication](/lab2/allow-arbitrary-loads.png)
