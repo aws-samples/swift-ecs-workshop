@@ -209,7 +209,7 @@ For example, if you are going to run the above with `curl` it would look like th
 
 We want to add another option to the app main page. When clicked, it will show the product listing. We will add the corresponding code to the web service, which will return a JSON data getting serialized to an object and display in this new page.
 
-6.	Download the zip package from [GitHub](https://github.com/awslabs/swift-ecs-workshop/tree/master/lab2/zipforlab2.zip) which contains the three files below:
+5.	Download the zip package from [GitHub](https://github.com/awslabs/swift-ecs-workshop/tree/master/lab2/zipforlab2.zip) which contains the three files below:
 
 	ProductListing.storyboard
 
@@ -217,18 +217,18 @@ We want to add another option to the app main page. When clicked, it will show t
 
 	MainViewController.swift
 
-7.	Open Finder and copy ProductListing.storyboard and ProductListingViewController.swift from the unzipped package
+6.	Open Finder and copy ProductListing.storyboard and ProductListingViewController.swift from the unzipped package
  to the sample application you downloaded from Mobile Hub under the following location:
 
 	MobileHub Sample Folder/MySampleApp/MySampleApp/ProductListingViewController.swift
 
 	MobileHub Sample Folder/MySampleApp/MySampleApp/ProductListing.storyboard
 
-8. Overwrite MainViewController.swift by copying it from the unzipped package and pasting it under mobile hub sample app at the following location:
+7. Overwrite MainViewController.swift by copying it from the unzipped package and pasting it under mobile hub sample app at the following location:
 
 	MobileHub Sample Folder/MySampleApp/MySampleApp/App/MainViewController.swift
 
-9. Open Xcode again to add files to your project.
+8. Open Xcode again to add files to your project.
 
 	a. Right click on MySampleApp→App and choose “Add Files to MySampleApp”.
 
@@ -238,11 +238,11 @@ We want to add another option to the app main page. When clicked, it will show t
 
 	d. Click “Add”.
 
-10. Open ProductListingViewController.swift
+9. Open ProductListingViewController.swift
 
-11. Search for “let url” and replace the first instance of existing URL with the URL for your service that you built in lab 1 and 2.
+10. Search for “let url” and replace the first instance of existing URL with the URL for your service that you built in lab 1 and 2.
 
-12. Enable the application to allow communication via HTTP
+11. Enable the application to allow communication via HTTP
 	a. In the left pane, verify that the Project Navigator is selected
 
 	b. Click the top-level MySampleApp project.
@@ -256,13 +256,13 @@ We want to add another option to the app main page. When clicked, it will show t
 Reference this screenshot for further detail:
 ![Allow HTTP Communication](/lab2/allow-arbitrary-loads.png)
 
-13. Save the project.
+12. Save the project.
 
-14. Build the project.
+13. Build the project.
 
-15. In the app, first sign-in using Facebook using the “Sign-in” button on the top right hand corner.
+14. In the app, first sign-in using Facebook using the “Sign-in” button on the top right hand corner.
 
-16. Once you are successfully signed in, go back to main page in the app and click on “Access Swift DB”.
+15. Once you are successfully signed in, go back to main page in the app and click on “Access Swift DB”.
 
 ## Lab 3: Testing the app on Device Farm
 
