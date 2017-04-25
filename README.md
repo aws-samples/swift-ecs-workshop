@@ -11,7 +11,7 @@
 
 * **Lab 4: Deploy to Amazon ECS using CodeCommit and CodePipeline**  
 
-  >*In this lab, you will utilize enahance the product api developed in lab 1, and commit it to AWS CodeCommit and then deploy it on Amazon ECS using Code Pipeline and CloudFormation*
+  >*In this lab, you will enhance the product api developed in lab 1, and commit it to AWS CodeCommit and then deploy it on Amazon ECS using Code Pipeline and CloudFormation*
 
 
 ## Deploy a Swift web application on Amazon ECS Workshop
@@ -153,6 +153,8 @@ Request body:
 
 > **Output**: Response code: 200
 
+For example, if you are going to run the above with `curl` it would look like this: `curl -H "Content-Type: application/json" -X POST -d '{"name" : "testproduct", "description" : "This is a testproduct", "price" : 20.50, "count" : 5, "image_url_1" : "https://d0.awsstatic.com/Test%20Images/Kate%20Test%20Images/ECS_Header.png", "image_url_2" : "https://d0.awsstatic.com/Test%20Images/Kate%20Test%20Images/ECS_Header.png"}' http://<<YOUR_IP>>/products`
+
 3. Run GET **http://cluster:instance:ip/products** from the RESTClient.
 
 **Output** :
@@ -181,7 +183,7 @@ Request body:
 1.	Go to the AWS console by opening http://aws.amazon.com in a web browser, and **verify** that you are in the N. Virginia region at the top right corner of the page.
 2.	In the list of service find “Mobile Hub”. Click on Mobile hub.
 3.	The welcome page for Mobile hub will show you an option to create a new project. Alternatively, if you have already use Mobile Hub it will show the list of projects that you had created.
-4.	Let us name the project “reInvent 2016”.
+4.	Give this project a cool name. You will have to tick the 'Allows AWS Mobile Hub to administer resources on my behalf.' line.
 5.	Once you create the project the next page show a cards layout wherein you will see AWS services that can be configured and added to your app.
 6.	We want to add a simple login using Facebook to our sample application. We will be using AWS Cognito for this.
 7.	Click on User-sign in card.
@@ -205,9 +207,9 @@ Request body:
 
 4.	Once the app is up and running you will find that it has one existing option, which indicates the user sign in process through Cognito.
 
-5.	We want to add another option to the app main page. This page when clicked will show up the product listing. We will add the corresponding code to the web service, which will return a JSON data getting serialized to an object and display in this new page.
+We want to add another option to the app main page. When clicked, it will show the product listing. We will add the corresponding code to the web service, which will return a JSON data getting serialized to an object and display in this new page.
 
-6.	Download the zip package from [GitHub](https://github.com/awslabs/swift-ecs-workshop/tree/master/lab2/zipforlab2.zip) which contains the three files below:
+5.	Download the zip package from [GitHub](https://github.com/awslabs/swift-ecs-workshop/tree/master/lab2/zipforlab2.zip) which contains the three files below:
 
 	ProductListing.storyboard
 
@@ -215,52 +217,50 @@ Request body:
 
 	MainViewController.swift
 
-7.	Open Finder and copy ProductListing.storyboard and ProductListingViewController.swift from the unzipped package
+6.	Open Finder and copy ProductListing.storyboard and ProductListingViewController.swift from the unzipped package
  to the sample application you downloaded from Mobile Hub under the following location:
 
 	MobileHub Sample Folder/MySampleApp/MySampleApp/ProductListingViewController.swift
 
 	MobileHub Sample Folder/MySampleApp/MySampleApp/ProductListing.storyboard
 
-8. Overwrite MainViewController.swift by copying it from the unzipped package and pasting it under mobile hub sample app at the following location:
+7. Overwrite MainViewController.swift by copying it from the unzipped package and pasting it under mobile hub sample app at the following location:
 
 	MobileHub Sample Folder/MySampleApp/MySampleApp/App/MainViewController.swift
 
-9. Open Xcode again to add files to your project.
+8. Go back to Xcode to add files to your project.
 
-	a. Right click on MySampleApp→App and choose “Add Files to MySampleApp”.
+	a. In the left pane, make sure you have selected the Project Navigator (folder icon), right click on MySampleApp→App and choose “Add Files to MySampleApp”.
 
-	b. Choose ProductListing.storyboard and ProductListingViewController.swift.    
+	b. Navigate to the relevant folder and choose ProductListing.storyboard and ProductListingViewController.swift.    
 
 	c. Check “Copy items if needed”.
 
 	d. Click “Add”.
 
-10. Open ProductListingViewController.swift
+9. Open ProductListingViewController.swift
 
-11. Search for “let url” and replace the first instance of existing URL with the URL for your service that you built in lab 1 and 2.
+10. Search for “let url” and replace the first instance of existing URL with the URL for your service that you built in lab 1 and 2.
 
-12. Enable the application to allow communication via HTTP
-	a. In the left pane, verify that the Project Navigator is selected
+11. Enable the application to allow communication via HTTP
+	a. Click the top-level MySampleApp project.
 
-	b. Click the top-level MySampleApp project.
+	b. In the center pane, click Info and scroll to App Transport Security Settings
 
-	c. In the center pane, click Info and scroll to App Transport Security Settings
+	c. Click on App Transport Security Settings and click the + sign.
 
-	d. Click on App Transport Security Settings and click the + sign.
-
-	e. Select Allow Arbitrary Loads and change the Boolean value to YES
+	d. Select Allow Arbitrary Loads and change the Boolean value to YES
 
 Reference this screenshot for further detail:
 ![Allow HTTP Communication](/lab2/allow-arbitrary-loads.png)
 
-13. Save the project.
+12. Save the project.
 
-14. Build the project.
+13. Build the project by clicking on Product \ Build in the menu.
 
-15. In the app, first sign-in using Facebook using the “Sign-in” button on the top right hand corner.
+14. In the app, first sign-in using Facebook using the “Sign-in” button on the top right hand corner.
 
-16. Once you are successfully signed in, go back to main page in the app and click on “Access Swift DB”.
+15. Once you are successfully signed in, go back to main page in the app and click on “Access Swift DB”.
 
 ## Lab 3: Testing the app on Device Farm
 
