@@ -413,9 +413,9 @@ Follow the instructions below to Create and Connect to an AWS CodeCommit Reposit
 
 	This will create a folder as the same name as <your CodeCommit Repo name> in your path where you executed the git clone command.
 
-	Copy the contents of **lab4/swift-products-example** directory into this new folder. The contents provide from `git clone https://github.com/awslabs/swift-ecs-workshop.git`
+	Copy the contents of **lab4/swift-product-example** directory into this new folder. The contents provide from `git clone https://github.com/awslabs/swift-ecs-workshop.git`
 
-			cd ~/swift-ecs-workshop/lab4/swift-products-example
+			cd ~/swift-ecs-workshop/lab4/swift-product-example
 			cp -r * ~/swift-product/
 			cd  ~/swift-product
 
