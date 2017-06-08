@@ -240,7 +240,7 @@ We want to add another option to the app main page. When clicked, it will show t
 
 9. Open ProductListingViewController.swift
 
-10. Search for “let url” and replace the first instance of existing URL with the URL for your service that you built in lab 1 and 2.
+10. Search for “let url” and replace the first instance of existing URL with the URL for your service that you built in lab 1.
 
 11. Enable the application to allow communication via HTTP
 	a. Click the top-level MySampleApp project.
