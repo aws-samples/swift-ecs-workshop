@@ -240,7 +240,7 @@ We want to add another option to the app main page. When clicked, it will show t
 
 9. Open ProductListingViewController.swift
 
-10. Search for “let url” and replace the first instance of existing URL with the URL for your service that you built in lab 1 and 2.
+10. Search for “let url” and replace the first instance of existing URL with the URL for your service that you built in lab 1.
 
 11. Enable the application to allow communication via HTTP
 	a. Click the top-level MySampleApp project.
@@ -276,9 +276,10 @@ Reference this screenshot for further detail:
 10.	Next click on “Next step”.
 11.	By default the test type selected will be “Built-in: Fuzz”. Click on “Next step”
 12.	On the Select devices page it will show the top pool of devices. We will work with this pool. Click on “Next Step”.
-13.	On the “Specify device state” page we do not want to change anything. Click on “Review and start run”.
-14.	The tests will run for around 15 mins.
-15.	Once the tests are finished you can view the detailed report of the test run.
+13.	On the “Specify device state” page we do not want to change anything. Click on "Next step".
+14. On the "Review and start run" page, Click on “Review and start run”.
+15.	The tests will run for around 15 mins.
+16.	Once the tests are finished you can view the detailed report of the test run.
 
 **(Optional) Steps to build IPA**
 
@@ -350,14 +351,14 @@ Follow the instructions below to Create and Connect to an AWS CodeCommit Reposit
 2.	You can use https or ssh to connect to your CodeCommit repository. We’ll connect via SSH in this lab. The steps need initial set up for AWS CodeCommit and steps for Linux/MacOS is provided as below. For other platform, refer to this link
 	<http://docs.aws.amazon.com/codecommit/latest/userguide/how-to-connect.html>
 	* Create a new IAM user at IAM console. (Use your credentials from Lab1). Provide this user Programmatic access.
-	* Add the following managed policies for the IAM user.
+	* Add the following managed policies for the IAM user (Third square: "Attach existing policies directly").
 		> *  AWSCodeCommitFullAccess
 		> *  AmazonEC2ContainerRegistryFullAccess
 		> *  AmazonEC2ContainerServiceFullAccess
 		> *  IAMReadOnlyAccess
 		> *  IAMUserSSHKeys
 
-	* On the Bastion host, open a terminal window on Bastion host and type
+	* With a terminal window and connected via SSH to the Bastion host, type:
 
 
 			cd $HOME/.ssh
@@ -414,7 +415,9 @@ Follow the instructions below to Create and Connect to an AWS CodeCommit Reposit
 
 		<your account number>.dkr.ecr.us-east-1.amazonaws.com/swiftrepo:latest
 
-	You can find your AWS account number on the right hand top corner of your AWS console.
+	You can find your AWS account number on the right hand top corner of your AWS console: Click on your user. A drop-down appears, click on "My Account". It will be the very first information you see on the page that appears.
+
+	Note: Do not change the ECR repo name. We are using a separate one for this stack.
 
 3.	Commit all of the copied contents into your CodeCommit repository.
 
@@ -509,5 +512,8 @@ Once the changes are checked in, verify that your CodePipeline is executing, cre
 	3.	Delete the CloudFormation stack and re-create it.
 
 * **Removal Steps**
-	1.	Scale the service down to zero running tasks.
-	2.	Delete the CloudFormation stack.
+	1.	Bring services to 0 desired tasks.
+	2.  Delete the ECS service you created in lab 1.
+	3.	Delete the CodePipeline artifact S3 bucket. You will find it in the S3 console and its name looks like "<ACCOUNT NUMBER>-codepipelineartifact".
+	4.	Delete the ECR Repository called "swiftrepo" as well as the one you created in lab 1 by using the ECS console.
+	5.	Delete the CloudFormation stack.
