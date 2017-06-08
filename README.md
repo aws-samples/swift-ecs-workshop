@@ -513,4 +513,5 @@ Once the changes are checked in, verify that your CodePipeline is executing, cre
 
 * **Removal Steps**
 	1.	Delete the CodePipeline artifact S3 bucket. You will find it in the S3 console and its name looks like "<ACCOUNT NUMBER>-codepipelineartifact".
-	2.	Delete the CloudFormation stack.
+	2.	Delete the ECR Repository called "swiftrepo" in the ECS console.
+	3.	Delete the CloudFormation stack.
