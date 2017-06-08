@@ -277,7 +277,7 @@ Reference this screenshot for further detail:
 11.	By default the test type selected will be “Built-in: Fuzz”. Click on “Next step”
 12.	On the Select devices page it will show the top pool of devices. We will work with this pool. Click on “Next Step”.
 13.	On the “Specify device state” page we do not want to change anything. Click on "Next step".
-14. Click on “Review and start run”.
+14. On the "Review and start run" page, Click on “Review and start run”.
 15.	The tests will run for around 15 mins.
 16.	Once the tests are finished you can view the detailed report of the test run.
 
