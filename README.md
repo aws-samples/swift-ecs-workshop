@@ -358,7 +358,7 @@ Follow the instructions below to Create and Connect to an AWS CodeCommit Reposit
 		> *  IAMReadOnlyAccess
 		> *  IAMUserSSHKeys
 
-	* On the Bastion host, open a terminal window on Bastion host and type
+	* With a terminal window and connected via SSH to the Bastion host, type:
 
 
 			cd $HOME/.ssh
