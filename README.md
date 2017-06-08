@@ -512,5 +512,5 @@ Once the changes are checked in, verify that your CodePipeline is executing, cre
 	3.	Delete the CloudFormation stack and re-create it.
 
 * **Removal Steps**
-	1.	Scale the service down to zero running tasks.
+	1.	Delete the CodePipeline artifact S3 bucket. You will find it in the S3 console and its name looks like <ACCOUNT NUMBER>-codepipelineartifact.
 	2.	Delete the CloudFormation stack.
