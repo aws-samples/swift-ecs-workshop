@@ -415,7 +415,9 @@ Follow the instructions below to Create and Connect to an AWS CodeCommit Reposit
 
 		<your account number>.dkr.ecr.us-east-1.amazonaws.com/swiftrepo:latest
 
-	You can find your AWS account number on the right hand top corner of your AWS console.
+	You can find your AWS account number on the right hand top corner of your AWS console: Click on your user. A drop-down appears, click on "My Account". It will be the very first information you see on the page that appears.
+
+	Note that you might also have to change the repo name if you do not use "swiftrepo"
 
 3.	Commit all of the copied contents into your CodeCommit repository.
 
