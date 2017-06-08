@@ -351,7 +351,7 @@ Follow the instructions below to Create and Connect to an AWS CodeCommit Reposit
 2.	You can use https or ssh to connect to your CodeCommit repository. We’ll connect via SSH in this lab. The steps need initial set up for AWS CodeCommit and steps for Linux/MacOS is provided as below. For other platform, refer to this link
 	<http://docs.aws.amazon.com/codecommit/latest/userguide/how-to-connect.html>
 	* Create a new IAM user at IAM console. (Use your credentials from Lab1). Provide this user Programmatic access.
-	* Add the following managed policies for the IAM user.
+	* Add the following managed policies for the IAM user (Third square: "Attach existing policies directly").
 		> *  AWSCodeCommitFullAccess
 		> *  AmazonEC2ContainerRegistryFullAccess
 		> *  AmazonEC2ContainerServiceFullAccess
