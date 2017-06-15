@@ -197,7 +197,7 @@ For example, if you are going to run the above with `curl` it would look like th
 6.	We want to add a simple login using Facebook to our sample application. We will be using AWS Cognito for this.
 7.	Click on User-sign in card.
 8.	You should see 4 options with Facebook, Google, SAML and Custom offered as choices. Select Facebook.
-9.	If you expand the documentation column using the blue arrow on the right side of the page, it will show you the instructions to enable Facebook login.
+9.	If you expand the documentation column using the blue question mark on the right side of the page, it will show you the instructions to enable Facebook login.
 10.	Follow the steps to enable a Facebook developer account, to create a Facebook app, and to enable your iOS app to login to Facebook.
 11.	Once the Facebook developer account is activated we want to copy the App id of our sample application so that we can use Facebook login in our sample app.
 12.	Paste the App id in the AWS Mobile Hub console page where we let off.
