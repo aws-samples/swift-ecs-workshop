@@ -124,7 +124,7 @@ The CloudFormation stack outputs a few commands that you’ll need during the de
 		*	Host port: 80
 		*	Container port: 8080
 		* 	Protocol: `tcp`
-		*	Click ‘Add Container’
+		*	Click ‘Add’
 
 	*	Click ‘Create’
 
