@@ -1,22 +1,166 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
     "Description": "QS(5004)  Create an EC2 Instance with a local development environment for Swift pre-installed. Contains a Docker configuration to allow easy deployment to Amazon ECS.",
-    "Parameters": {
-        "KeyName": {
-            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instance",
-            "Type": "AWS::EC2::KeyPair::KeyName",
-            "ConstraintDescription": "Must be the name of an existing EC2 KeyPair.",
-            "MinLength": 1
+    "Mappings": {
+        "RegionMap": {
+            "us-east-1": {
+                "BastionAMI": "ami-80861296",
+                "ClusterAMI": "ami-55870742"
+            },
+            "us-east-2": {
+                "BastionAMI": "ami-618fab04",
+                "ClusterAMI": "ami-44164c21"
+            },
+            "us-west-1": {
+                "BastionAMI": "ami-2afbde4a",
+                "ClusterAMI": "ami-07713767"
+            },
+            "us-west-2": {
+                "BastionAMI": "ami-efd0428f",
+                "ClusterAMI": "ami-241bd844"
+            }
+        }
+    },
+    "Outputs": {
+        "BastionIp": {
+            "Description": "Public IP address of the newly created EC2 instance",
+            "Value": {
+                "Fn::GetAtt": [
+                    "BastionInstance",
+                    "PublicIp"
+                ]
+            }
         },
-        "KeyPairPath": {
-            "Description": "Path to the local .pem file named in KeyName",
-            "Type": "String",
-            "MinLength": 1
+        "ClusterIp": {
+            "Description": "Public IP address of the ECS cluster instance",
+            "Value": {
+                "Fn::GetAtt": [
+                    "ClusterInstance",
+                    "PublicIp"
+                ]
+            }
+        },
+        "DatabaseEndpoint": {
+            "Description": "Public IP address of the newly created EC2 instance",
+            "Value": {
+                "Fn::GetAtt": [
+                    "DBinstance",
+                    "Endpoint.Address"
+                ]
+            }
+        },
+        "PushPreBuiltImage": {
+            "Description": "Push the pre-built Docker image to the ECS Repository",
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "docker push ",
+                        {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    {
+                                        "Ref": "AWS::AccountId"
+                                    },
+                                    ".dkr.ecr.",
+                                    {
+                                        "Ref": "AWS::Region"
+                                    },
+                                    ".amazonaws.com/",
+                                    {
+                                        "Ref": "ECSRepository"
+                                    }
+                                ]
+                            ]
+                        },
+                        ":latest"
+                    ]
+                ]
+            }
+        },
+        "RepositoryURL": {
+            "Description": "ECS Repository clone URL",
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        {
+                            "Ref": "AWS::AccountId"
+                        },
+                        ".dkr.ecr.",
+                        {
+                            "Ref": "AWS::Region"
+                        },
+                        ".amazonaws.com/",
+                        {
+                            "Ref": "ECSRepository"
+                        }
+                    ]
+                ]
+            }
+        },
+        "SSHToBastion": {
+            "Description": "1. Unix command to SSH into the bastion instance",
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "ssh -i ",
+                        {
+                            "Ref": "KeyPairPath"
+                        },
+                        " ubuntu@",
+                        {
+                            "Fn::GetAtt": [
+                                "BastionInstance",
+                                "PublicIp"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        },
+        "TagPreBuiltImage": {
+            "Description": "Tag the pre-built Docker image",
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "docker tag swift-on-ecs-prebuilt:latest ",
+                        {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    {
+                                        "Ref": "AWS::AccountId"
+                                    },
+                                    ".dkr.ecr.",
+                                    {
+                                        "Ref": "AWS::Region"
+                                    },
+                                    ".amazonaws.com/",
+                                    {
+                                        "Ref": "ECSRepository"
+                                    }
+                                ]
+                            ]
+                        },
+                        ":latest"
+                    ]
+                ]
+            }
+        }
+    },
+    "Parameters": {
+        "ECRRepository": {
+            "AllowedPattern": "[a-z]*",
+            "ConstraintDescription": "Must be all lower case.",
+            "Description": "The name of ECR repository in all lower case",
+            "MinLength": 1,
+            "Type": "String"
         },
         "InstanceType": {
-            "Description": "WebServer EC2 instance type",
-            "Type": "String",
-            "Default": "t2.small",
             "AllowedValues": [
                 "t1.micro",
                 "t2.nano",
@@ -73,161 +217,71 @@
                 "cc2.8xlarge",
                 "cg1.4xlarge"
             ],
-            "ConstraintDescription": "must be a valid EC2 instance type."
+            "ConstraintDescription": "must be a valid EC2 instance type.",
+            "Default": "t2.small",
+            "Description": "WebServer EC2 instance type",
+            "Type": "String"
+        },
+        "KeyName": {
+            "ConstraintDescription": "Must be the name of an existing EC2 KeyPair.",
+            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instance",
+            "MinLength": 1,
+            "Type": "AWS::EC2::KeyPair::KeyName"
+        },
+        "KeyPairPath": {
+            "Description": "Path to the local .pem file named in KeyName",
+            "MinLength": 1,
+            "Type": "String"
         },
         "SSHLocation": {
-            "Description": "The IP address range that can be used to SSH to the EC2 instances Note a value of 0.0.0.0/0 will allow access from anywhere",
-            "Type": "String",
-            "MinLength": "9",
-            "MaxLength": "18",
             "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
-            "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
-        },
-        "ECRRepository": {
-            "Description": "The name of ECR repository in all lower case",
-            "Type": "String",
-            "AllowedPattern": "[a-z]*",
-            "ConstraintDescription": "Must be all lower case.",
-            "MinLength": 1
-        }
-
-    },
-    "Mappings": {
-        "RegionMap": {
-            "us-east-1": {
-                "BastionAMI": "ami-13ee8c04",
-                "ClusterAMI": "ami-55870742"
-            },
-            "us-east-2": {
-                "BastionAMI": "ami-b52379d0",
-                "ClusterAMI": "ami-44164c21"
-            },
-            "us-west-1": {
-                "BastionAMI": "ami-b1e3a8d1",
-                "ClusterAMI": "ami-07713767"
-            },
-            "us-west-2": {
-                "BastionAMI": "ami-3bdf795b",
-                "ClusterAMI": "ami-241bd844"
-            }
+            "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x.",
+            "Description": "The IP address range that can be used to SSH to the EC2 instances Note a value of 0.0.0.0/0 will allow access from anywhere",
+            "MaxLength": "18",
+            "MinLength": "9",
+            "Type": "String"
         }
     },
     "Resources": {
-        "VPC": {
-            "Type": "AWS::EC2::VPC",
-            "Properties": {
-                "CidrBlock": "10.0.0.0/16",
-                "EnableDnsSupport": "true",
-                "EnableDnsHostnames": "true",
-                "InstanceTenancy": "default"
-            }
-        },
-        "Subnet": {
-            "Type": "AWS::EC2::Subnet",
-            "Properties": {
-                "VpcId": {
-                    "Ref": "VPC"
-                },
-                "AvailabilityZone" : {
-                   "Fn::Select" : [ "0", { "Fn::GetAZs" : "" } ]
-                 },
-                "CidrBlock": "10.0.0.0/24",
-                "MapPublicIpOnLaunch": "true",
-                "Tags": [
-                    {
-                        "Key": "Application",
-                        "Value": {
-                            "Ref": "AWS::StackId"
-                        }
-                    }
-                ]
-            }
-        },
-        "Subnet2": {
-            "Type": "AWS::EC2::Subnet",
-            "Properties": {
-                "VpcId": {
-                    "Ref": "VPC"
-                },
-                "AvailabilityZone" : {
-                   "Fn::Select" : [ "1", { "Fn::GetAZs" : "" } ]
-                 },
-                "CidrBlock": "10.0.1.0/24",
-                "MapPublicIpOnLaunch": "true",
-                "Tags": [
-                    {
-                        "Key": "Application",
-                        "Value": {
-                            "Ref": "AWS::StackId"
-                        }
-                    }
-                ]
-            }
-        },
-        "InternetGateway": {
-            "Type": "AWS::EC2::InternetGateway",
-            "Properties": {
-                "Tags": [
-                    {
-                        "Key": "foo",
-                        "Value": "bar"
-                    }
-                ]
-            }
-        },
-        "InternetGatewayAttachment": {
-            "DependsOn": "InternetGateway",
-            "Type": "AWS::EC2::VPCGatewayAttachment",
-            "Properties": {
-                "VpcId": {
-                    "Ref": "VPC"
-                },
-                "InternetGatewayId": {
-                    "Ref": "InternetGateway"
-                }
-            }
-        },
-        "RouteTableIGW": {
-            "Type": "AWS::EC2::RouteTable",
-            "Properties": {
-                "VpcId": {
-                    "Ref": "VPC"
-                }
-            }
-        },
-        "Route": {
-            "Type": "AWS::EC2::Route",
-            "DependsOn": "InternetGateway",
-            "Properties": {
-                "RouteTableId": {
-                    "Ref": "RouteTableIGW"
-                },
-                "DestinationCidrBlock": "0.0.0.0/0",
-                "GatewayId": {
-                    "Ref": "InternetGateway"
-                }
-            }
-        },
-        "SubnetRouteTableAssociation": {
-            "Type": "AWS::EC2::SubnetRouteTableAssociation",
-            "DependsOn": "InternetGateway",
-            "Properties": {
-                "RouteTableId": {
-                    "Ref": "RouteTableIGW"
-                },
-                "SubnetId": {
-                    "Ref": "Subnet"
-                }
-            }
-        },
         "BastionInstance": {
-            "Type": "AWS::EC2::Instance",
+            "Metadata": {
+                "AWS::CloudFormation::Init": {
+                    "config": {
+                        "commands": {
+                            "01_docker_on_start": {
+                                "command": "systemctl enable docker"
+                            },
+                            "02_add_ubuntu_to_docker": {
+                                "command": "sudo usermod -aG docker ubuntu"
+                            }
+                        },
+                        "packages": {
+                            "apt": {
+                                "docker-ce": [],
+                                "git": []
+                            }
+                        }
+                    }
+                }
+            },
             "Properties": {
                 "IamInstanceProfile": {
                     "Ref": "BastionInstanceProfile"
                 },
+                "ImageId": {
+                    "Fn::FindInMap": [
+                        "RegionMap",
+                        {
+                            "Ref": "AWS::Region"
+                        },
+                        "BastionAMI"
+                    ]
+                },
                 "InstanceType": {
                     "Ref": "InstanceType"
+                },
+                "KeyName": {
+                    "Ref": "KeyName"
                 },
                 "SecurityGroupIds": [
                     {
@@ -239,18 +293,6 @@
                 ],
                 "SubnetId": {
                     "Ref": "Subnet"
-                },
-                "KeyName": {
-                    "Ref": "KeyName"
-                },
-                "ImageId": {
-                    "Fn::FindInMap": [
-                        "RegionMap",
-                        {
-                            "Ref": "AWS::Region"
-                        },
-                        "BastionAMI"
-                    ]
                 },
                 "Tags": [
                     {
@@ -267,99 +309,149 @@
                             ]
                         }
                     }
-                ]
-            }
-        },
-        "BastionInstanceSecurityGroup": {
-            "Type": "AWS::EC2::SecurityGroup",
-            "Properties": {
-                "VpcId": {
-                    "Ref": "VPC"
-                },
-                "GroupDescription": "Enable SSH access via port 22",
-                "SecurityGroupIngress": [
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": "22",
-                        "ToPort": "22",
-                        "CidrIp": {
-                            "Ref": "SSHLocation"
-                        }
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash -x\n",
+                                "apt-get -y update\n",
+                                "apt-get -y install  python-setuptools python-pip\n",
+                                "easy_install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz\n",
+                                "pip install awscli \n",
+                                "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - \n",
+                                "add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\" \n",
+                                "apt-get -y update \n",
+                                "/usr/local/bin/cfn-init",
+                                " --verbose ",
+                                " --stack ",
+                                {
+                                    "Ref": "AWS::StackName"
+                                },
+                                " --resource BastionInstance",
+                                " --region ",
+                                {
+                                    "Ref": "AWS::Region"
+                                },
+                                "\n",
+                                "/usr/local/bin/cfn-signal -e $? ",
+                                " '",
+                                {
+                                    "Ref": "BastionWaitHandle"
+                                },
+                                "'"
+                            ]
+                        ]
                     }
-                ]
-            }
+                }
+            },
+            "Type": "AWS::EC2::Instance"
         },
         "BastionInstanceProfile": {
-            "Type": "AWS::IAM::InstanceProfile",
             "Properties": {
                 "Roles": [
                     {
                         "Ref": "BastionInstanceRole"
                     }
                 ]
-            }
+            },
+            "Type": "AWS::IAM::InstanceProfile"
         },
         "BastionInstanceRole": {
-            "Type": "AWS::IAM::Role",
             "Properties": {
                 "AssumeRolePolicyDocument": {
-                    "Version": "2012-10-17",
                     "Statement": [
                         {
+                            "Action": [
+                                "sts:AssumeRole"
+                            ],
                             "Effect": "Allow",
                             "Principal": {
                                 "Service": [
                                     "ec2.amazonaws.com"
                                 ]
-                            },
-                            "Action": [
-                                "sts:AssumeRole"
-                            ]
+                            }
                         }
-                    ]
+                    ],
+                    "Version": "2012-10-17"
                 },
                 "Policies": [
                     {
-                        "PolicyName": "codecommit",
                         "PolicyDocument": {
-                            "Version": "2012-10-17",
                             "Statement": [
                                 {
-                                    "Effect": "Allow",
                                     "Action": [
                                         "codecommit:*"
                                     ],
+                                    "Effect": "Allow",
                                     "Resource": "*"
                                 }
-                            ]
-                        }
+                            ],
+                            "Version": "2012-10-17"
+                        },
+                        "PolicyName": "codecommit"
                     },
                     {
-                        "PolicyName": "ecr",
                         "PolicyDocument": {
-                            "Version": "2012-10-17",
                             "Statement": [
                                 {
-                                    "Effect": "Allow",
                                     "Action": [
                                         "ecr:*"
                                     ],
+                                    "Effect": "Allow",
                                     "Resource": "*"
                                 }
-                            ]
-                        }
+                            ],
+                            "Version": "2012-10-17"
+                        },
+                        "PolicyName": "ecr"
                     }
                 ]
-            }
+            },
+            "Type": "AWS::IAM::Role"
+        },
+        "BastionInstanceSecurityGroup": {
+            "Properties": {
+                "GroupDescription": "Enable SSH access via port 22",
+                "SecurityGroupIngress": [
+                    {
+                        "CidrIp": {
+                            "Ref": "SSHLocation"
+                        },
+                        "FromPort": "22",
+                        "IpProtocol": "tcp",
+                        "ToPort": "22"
+                    }
+                ],
+                "VpcId": {
+                    "Ref": "VPC"
+                }
+            },
+            "Type": "AWS::EC2::SecurityGroup"
+        },
+        "BastionWaitHandle": {
+            "Type": "AWS::CloudFormation::WaitConditionHandle"
         },
         "ClusterInstance": {
-            "Type": "AWS::EC2::Instance",
             "Properties": {
                 "IamInstanceProfile": {
                     "Ref": "ClusterInstanceProfile"
                 },
+                "ImageId": {
+                    "Fn::FindInMap": [
+                        "RegionMap",
+                        {
+                            "Ref": "AWS::Region"
+                        },
+                        "ClusterAMI"
+                    ]
+                },
                 "InstanceType": {
                     "Ref": "InstanceType"
+                },
+                "KeyName": {
+                    "Ref": "KeyName"
                 },
                 "SecurityGroupIds": [
                     {
@@ -371,18 +463,6 @@
                 ],
                 "SubnetId": {
                     "Ref": "Subnet"
-                },
-                "KeyName": {
-                    "Ref": "KeyName"
-                },
-                "ImageId": {
-                    "Fn::FindInMap": [
-                        "RegionMap",
-                        {
-                            "Ref": "AWS::Region"
-                        },
-                        "ClusterAMI"
-                    ]
                 },
                 "Tags": [
                     {
@@ -422,259 +502,268 @@
                         ]
                     }
                 }
-            }
+            },
+            "Type": "AWS::EC2::Instance"
         },
         "ClusterInstanceProfile": {
-            "Type": "AWS::IAM::InstanceProfile",
             "Properties": {
                 "Roles": [
                     {
                         "Ref": "ClusterInstanceRole"
                     }
                 ]
-            }
+            },
+            "Type": "AWS::IAM::InstanceProfile"
         },
         "ClusterInstanceRole": {
-            "Type": "AWS::IAM::Role",
             "Properties": {
                 "AssumeRolePolicyDocument": {
-                    "Version": "2012-10-17",
                     "Statement": [
                         {
+                            "Action": [
+                                "sts:AssumeRole"
+                            ],
                             "Effect": "Allow",
                             "Principal": {
                                 "Service": [
                                     "ec2.amazonaws.com"
                                 ]
-                            },
-                            "Action": [
-                                "sts:AssumeRole"
-                            ]
+                            }
                         }
-                    ]
+                    ],
+                    "Version": "2012-10-17"
                 },
                 "ManagedPolicyArns": [
                     "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
                 ],
                 "Policies": [
                     {
-                        "PolicyName": "ECRAccess",
                         "PolicyDocument": {
-                            "Version": "2012-10-17",
                             "Statement": [
                                 {
-                                    "Effect": "Allow",
                                     "Action": "ecr:*",
+                                    "Effect": "Allow",
                                     "Resource": "*"
                                 }
-                            ]
-                        }
+                            ],
+                            "Version": "2012-10-17"
+                        },
+                        "PolicyName": "ECRAccess"
                     }
                 ]
-            }
+            },
+            "Type": "AWS::IAM::Role"
         },
         "ClusterInstanceSecurityGroup": {
-            "Type": "AWS::EC2::SecurityGroup",
             "Properties": {
-                "VpcId": {
-                    "Ref": "VPC"
-                },
                 "GroupDescription": "Enable SSH access via port 22",
                 "SecurityGroupIngress": [
                     {
-                        "IpProtocol": "tcp",
-                        "FromPort": "22",
-                        "ToPort": "22",
                         "CidrIp": {
                             "Ref": "SSHLocation"
-                        }
+                        },
+                        "FromPort": "22",
+                        "IpProtocol": "tcp",
+                        "ToPort": "22"
                     },
                     {
-                        "IpProtocol": "tcp",
+                        "CidrIp": "0.0.0.0/0",
                         "FromPort": "80",
-                        "ToPort": "80",
-                        "CidrIp": "0.0.0.0/0"
+                        "IpProtocol": "tcp",
+                        "ToPort": "80"
+                    }
+                ],
+                "VpcId": {
+                    "Ref": "VPC"
+                }
+            },
+            "Type": "AWS::EC2::SecurityGroup"
+        },
+        "DBEC2SecurityGroup": {
+            "Properties": {
+                "GroupDescription": "Open database for access from cluster instance",
+                "SecurityGroupIngress": [
+                    {
+                        "FromPort": "3306",
+                        "IpProtocol": "tcp",
+                        "SourceSecurityGroupId": {
+                            "Fn::GetAtt": [
+                                "ClusterInstanceSecurityGroup",
+                                "GroupId"
+                            ]
+                        },
+                        "ToPort": "3306"
+                    }
+                ],
+                "VpcId": {
+                    "Ref": "VPC"
+                }
+            },
+            "Type": "AWS::EC2::SecurityGroup"
+        },
+        "DBinstance": {
+            "DeletionPolicy": "Delete",
+            "Properties": {
+                "AllocatedStorage": "5",
+                "BackupRetentionPeriod": "0",
+                "DBInstanceClass": "db.t2.micro",
+                "DBName": "testDB",
+                "DBSubnetGroupName": {
+                    "Ref": "myDBSubnetGroup"
+                },
+                "Engine": "MySQL",
+                "MasterUserPassword": "password",
+                "MasterUsername": "admin",
+                "MultiAZ": false,
+                "VPCSecurityGroups": [
+                    {
+                        "Ref": "DBEC2SecurityGroup"
                     }
                 ]
-            }
-        },
-        "ECSRepository": {
-            "Type": "AWS::ECR::Repository",
-            "Properties": {
-                "RepositoryName": {
-                    "Ref": "ECRRepository"
-                }
-            }
+            },
+            "Type": "AWS::RDS::DBInstance"
         },
         "ECSCluster": {
             "Type": "AWS::ECS::Cluster"
         },
-        "myDBSubnetGroup" : {
-            "Type" : "AWS::RDS::DBSubnetGroup",
-            "Properties" : {
-               "DBSubnetGroupDescription" : "description",
-               "SubnetIds" : [ { "Ref":"Subnet"},{ "Ref":"Subnet2"} ]
-            }
-         },
-         "DBEC2SecurityGroup": {
-            "Type": "AWS::EC2::SecurityGroup",
-            "Properties" : {
-              "GroupDescription": "Open database for access from cluster instance",
-              "VpcId" : {"Ref":"VPC"},
-              "SecurityGroupIngress" : [{
-                "IpProtocol" : "tcp",
-                "FromPort" : "3306",
-                "ToPort" : "3306",
-                "SourceSecurityGroupId" : {"Fn::GetAtt":["ClusterInstanceSecurityGroup", "GroupId"]}
-              }]
-            }
-          },
-          "DBinstance" : {
-               "Type" : "AWS::RDS::DBInstance",
-               "Properties" : {
-                  "AllocatedStorage" : "5",
-                  "DBInstanceClass" : "db.t2.micro",
-                  "MultiAZ" : false,
-                 "DBName" : "testDB",
-                  "VPCSecurityGroups" : [ { "Ref" : "DBEC2SecurityGroup" } ],
-                  "DBSubnetGroupName" : { "Ref" : "myDBSubnetGroup" },
-                 "BackupRetentionPeriod" : "0",
-                  "Engine" : "MySQL",
-                 "MasterUserPassword": "password",
-                 "MasterUsername"    : "admin"
-              },
-               "DeletionPolicy" : "Delete"
-            }
-    },
-    "Outputs": {
-        "BastionIp": {
-            "Description": "Public IP address of the newly created EC2 instance",
-            "Value": {
-                "Fn::GetAtt": [
-                    "BastionInstance",
-                    "PublicIp"
-                ]
-            }
+        "ECSRepository": {
+            "Properties": {
+                "RepositoryName": {
+                    "Ref": "ECRRepository"
+                }
+            },
+            "Type": "AWS::ECR::Repository"
         },
-        "SSHToBastion": {
-            "Description": "1. Unix command to SSH into the bastion instance",
-            "Value": {
-                "Fn::Join": [
-                    "",
-                    [
-                        "ssh -i ",
+        "InternetGateway": {
+            "Properties": {
+                "Tags": [
+                    {
+                        "Key": "foo",
+                        "Value": "bar"
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::InternetGateway"
+        },
+        "InternetGatewayAttachment": {
+            "DependsOn": "InternetGateway",
+            "Properties": {
+                "InternetGatewayId": {
+                    "Ref": "InternetGateway"
+                },
+                "VpcId": {
+                    "Ref": "VPC"
+                }
+            },
+            "Type": "AWS::EC2::VPCGatewayAttachment"
+        },
+        "Route": {
+            "DependsOn": "InternetGateway",
+            "Properties": {
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "GatewayId": {
+                    "Ref": "InternetGateway"
+                },
+                "RouteTableId": {
+                    "Ref": "RouteTableIGW"
+                }
+            },
+            "Type": "AWS::EC2::Route"
+        },
+        "RouteTableIGW": {
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                }
+            },
+            "Type": "AWS::EC2::RouteTable"
+        },
+        "Subnet": {
+            "Properties": {
+                "AvailabilityZone": {
+                    "Fn::Select": [
+                        "0",
                         {
-                            "Ref": "KeyPairPath"
-                        },
-                        " ubuntu@",
-                        {
-                            "Fn::GetAtt": [
-                                "BastionInstance",
-                                "PublicIp"
-                            ]
+                            "Fn::GetAZs": ""
                         }
                     ]
-                ]
-            }
+                },
+                "CidrBlock": "10.0.0.0/24",
+                "MapPublicIpOnLaunch": "true",
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackId"
+                        }
+                    }
+                ],
+                "VpcId": {
+                    "Ref": "VPC"
+                }
+            },
+            "Type": "AWS::EC2::Subnet"
         },
-        "ClusterIp": {
-            "Description": "Public IP address of the ECS cluster instance",
-            "Value": {
-                "Fn::GetAtt": [
-                    "ClusterInstance",
-                    "PublicIp"
-                ]
-            }
-        },
-        "TagPreBuiltImage": {
-            "Description": "Tag the pre-built Docker image",
-            "Value": {
-                "Fn::Join": [
-                    "",
-                    [
-                        "docker tag swift-on-ecs-prebuilt:latest ",
+        "Subnet2": {
+            "Properties": {
+                "AvailabilityZone": {
+                    "Fn::Select": [
+                        "1",
                         {
-                            "Fn::Join": [
-                                "",
-                                [
-                                    {
-                                        "Ref": "AWS::AccountId"
-                                    },
-                                    ".dkr.ecr.",
-                                    {
-                                        "Ref": "AWS::Region"
-                                    },
-                                    ".amazonaws.com/",
-                                    {
-                                        "Ref": "ECSRepository"
-                                    }
-                                ]
-                            ]
-                        },
-                        ":latest"
-                    ]
-                ]
-            }
-        },
-        "PushPreBuiltImage": {
-            "Description": "Push the pre-built Docker image to the ECS Repository",
-            "Value": {
-                "Fn::Join": [
-                    "",
-                    [
-                        "docker push ",
-                        {
-                            "Fn::Join": [
-                                "",
-                                [
-                                    {
-                                        "Ref": "AWS::AccountId"
-                                    },
-                                    ".dkr.ecr.",
-                                    {
-                                        "Ref": "AWS::Region"
-                                    },
-                                    ".amazonaws.com/",
-                                    {
-                                        "Ref": "ECSRepository"
-                                    }
-                                ]
-                            ]
-                        },
-                        ":latest"
-                    ]
-                ]
-            }
-        },
-        "RepositoryURL": {
-            "Description": "ECS Repository clone URL",
-            "Value": {
-                "Fn::Join": [
-                    "",
-                    [
-                        {
-                            "Ref": "AWS::AccountId"
-                        },
-                        ".dkr.ecr.",
-                        {
-                            "Ref": "AWS::Region"
-                        },
-                        ".amazonaws.com/",
-                        {
-                            "Ref": "ECSRepository"
+                            "Fn::GetAZs": ""
                         }
                     ]
-                ]
-            }
+                },
+                "CidrBlock": "10.0.1.0/24",
+                "MapPublicIpOnLaunch": "true",
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackId"
+                        }
+                    }
+                ],
+                "VpcId": {
+                    "Ref": "VPC"
+                }
+            },
+            "Type": "AWS::EC2::Subnet"
         },
-        "DatabaseEndpoint": {
-            "Description": "Public IP address of the newly created EC2 instance",
-            "Value": {
-                "Fn::GetAtt": [
-                    "DBinstance",
-                    "Endpoint.Address"
+        "SubnetRouteTableAssociation": {
+            "DependsOn": "InternetGateway",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "RouteTableIGW"
+                },
+                "SubnetId": {
+                    "Ref": "Subnet"
+                }
+            },
+            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+        },
+        "VPC": {
+            "Properties": {
+                "CidrBlock": "10.0.0.0/16",
+                "EnableDnsHostnames": "true",
+                "EnableDnsSupport": "true",
+                "InstanceTenancy": "default"
+            },
+            "Type": "AWS::EC2::VPC"
+        },
+        "myDBSubnetGroup": {
+            "Properties": {
+                "DBSubnetGroupDescription": "description",
+                "SubnetIds": [
+                    {
+                        "Ref": "Subnet"
+                    },
+                    {
+                        "Ref": "Subnet2"
+                    }
                 ]
-            }
+            },
+            "Type": "AWS::RDS::DBSubnetGroup"
         }
     }
 }
