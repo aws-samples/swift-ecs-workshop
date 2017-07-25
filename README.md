@@ -37,7 +37,7 @@ At the end of this workshop, you will know how to develop and deploy a complete 
 Create a key pair in your preferred region.
 You can follow steps here: [http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair)
 
-Also, change the permission on your keypair with the following command.
+Move the file to a safe location. By default, you store your local PEM files in `~/.ssh`. Also, change the permission on your keypair with the following command.
 `chmod 400 <your keypair>`
 
 ### Labs
@@ -61,9 +61,14 @@ You can change the region by using the region selector in the navigation bar. Ch
 
 2. On the Select Template page, upload the downloaded template, and then choose Next.
 
-3. On the Specify Details page, review the parameters for the template. Enter values for the parameters that require your input. For all other parameters, you can customize the default settings provided by the template. When you finish reviewing and customizing the parameters, choose Next.
+3. On the Specify Details page, review the parameters for the template. All the parameters on this page require input.
+	* Stack name: Up to you
+	* ECRRepository: Up to you
+	* KeyName: Select your new keypair
+	* KeyPairPath: The local path of the keypair file on your machine
+	* SSHLocation: `<your-public-ip>/32`. * When you finish reviewing and customizing the parameters, choose Next
 
-4. On the Options page, you can specify tags (key-value pairs) for resources in your stack and set advanced options. When you’re done, choose Next.
+4. On the Options page, you can specify tags (key-value pairs) for resources in your stack and set advanced options. You can also leave it blank. When you’re done, choose Next.
 
 5. On the Review page, review and confirm the template settings. Under Capabilities, select the check box to acknowledge that the template will create IAM resources.
 
@@ -77,10 +82,14 @@ The CloudFormation stack outputs a few commands that you’ll need during the de
 **Configuration**
 
 1. SSH into the Bastion Instance using the
-*SSHToBastion* command from the above Cloudformation template
+*SSHToBastion* command from the Outputs tab of your Cloudformation stack.
 
 	Please configure awscli using the command
-	`aws configure` with your access key and secret for the admin user. Chose `us-east-1` as a default region.
+	`aws configure` with your access key and secret for the admin user.
+	
+	You can find your access key by finding your name on the top right tab of the AWS Console and selecting "My Security Credentials." Use an existing access key if you know where you stored its secret, or create a new access key (and store the secret somewhere safe because that is only shown on creation).
+	
+	Once you have the access key, choose `us-east-1` as a default region in your awscli configuration.
 
 	If you are using a Windows laptop, please the steps listed here: [http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html]()
 
@@ -89,7 +98,7 @@ The CloudFormation stack outputs a few commands that you’ll need during the de
 
 3. Change directory to swift-ecs-workshop/lab1/swift-product/
 
-4. Modify the **Config/secrets/mysql.json** file host to your Database instance endpoint from the cloudformation output.
+4. Modify the **Config/secrets/mysql.json** file host to your Database instance endpoint from the cloudformation output. You can edit the file by prepending the file name with your text editor of choice: nano, vim or emacs.
 
 5.	Build, tag, and push a Docker image to ECR
 
@@ -97,9 +106,9 @@ The CloudFormation stack outputs a few commands that you’ll need during the de
 		```docker build -t swift-on-ecs-prebuilt --build-arg SWIFT_VERSION=3.0-RELEASE . ```
 
 	* Retrieve the Docker login command
-	`aws ecr get-login --region us-east-1`
+	`$(aws ecr get-login --region us-east-1)`
 
-	* Run the output of the previous command to log into Docker. You might see a warning about a deprecated flag. This should be no cause for concern as long as you see the "Login Succeeded." message.
+	*  You might see a warning about a deprecated flag. This should be no cause for concern as long as you see the "Login Succeeded." message.
 
 	*	Tag the image using the `{{TagPreBuiltImage}}` from Cloudformation outputs.
 
@@ -115,7 +124,7 @@ The CloudFormation stack outputs a few commands that you’ll need during the de
 		*	Host port: 80
 		*	Container port: 8080
 		* 	Protocol: `tcp`
-		*	Click ‘Add Container’
+		*	Click ‘Add’
 
 	*	Click ‘Create’
 
@@ -133,7 +142,7 @@ The CloudFormation stack outputs a few commands that you’ll need during the de
 1. Get Container Id, by going to Cluster -> Click on Service -> Click on Task , look under Container Section.
 
 2.  Wait for the service to stabilize, and then connect to the Cluster instance in a browser.
- Open `http://<cluster-instance-ip>/`
+ Open `http://<cluster-instance-ip>/`. You can find the ip in the Outputs tab of your CloudFormation stack.
 
 >  Output: You should see a Vapor Homepage.
 
@@ -188,7 +197,7 @@ For example, if you are going to run the above with `curl` it would look like th
 6.	We want to add a simple login using Facebook to our sample application. We will be using AWS Cognito for this.
 7.	Click on User-sign in card.
 8.	You should see 4 options with Facebook, Google, SAML and Custom offered as choices. Select Facebook.
-9.	If you expand the documentation column using the blue arrow on the right side of the page, it will show you the instructions to enable Facebook login.
+9.	If you expand the documentation column using the blue question mark on the right side of the page, it will show you the instructions to enable Facebook login.
 10.	Follow the steps to enable a Facebook developer account, to create a Facebook app, and to enable your iOS app to login to Facebook.
 11.	Once the Facebook developer account is activated we want to copy the App id of our sample application so that we can use Facebook login in our sample app.
 12.	Paste the App id in the AWS Mobile Hub console page where we let off.
@@ -405,9 +414,9 @@ Follow the instructions below to Create and Connect to an AWS CodeCommit Reposit
 
 	This will create a folder as the same name as <your CodeCommit Repo name> in your path where you executed the git clone command.
 
-	Copy the contents of **lab4/swift-products-example** directory into this new folder. The contents provide from `git clone https://github.com/awslabs/swift-ecs-workshop.git`
+	Copy the contents of **lab4/swift-product-example** directory into this new folder. The contents provide from `git clone https://github.com/awslabs/swift-ecs-workshop.git`
 
-			cd ~/swift-ecs-workshop/lab4/swift-products-example
+			cd ~/swift-ecs-workshop/lab4/swift-product-example
 			cp -r * ~/swift-product/
 			cd  ~/swift-product
 
