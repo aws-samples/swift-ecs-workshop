@@ -35,7 +35,7 @@ At the end of this workshop, you will know how to develop and deploy a complete 
 > Use the region selector in the navigation bar to choose the Amazon EC2 region where you want to deploy Swift web application on AWS.
 
 Create a key pair in your preferred region.
-You can follow steps here: [http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair]()
+You can follow steps here: [http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair)
 
 Also, change the permission on your keypair with the following command.
 `chmod 400 <your keypair>`
