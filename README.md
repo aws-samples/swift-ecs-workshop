@@ -66,7 +66,7 @@ You can change the region by using the region selector in the navigation bar. Ch
 	* ECRRepository: Up to you (e.g. vapor, same warning)
 	* KeyName: Select your new keypair
 	* KeyPairPath: The local path of the keypair file on your machine (don't leave empty)
-	* SSHLocation: `<your-public-ip>/32`. This is the IP you will be connecting from to the bastion host.
+	* SSHLocation: `<your-public-ip>/32`. This is the IP address you will be connecting from to the bastion host.
 	 When you finish reviewing and customizing the parameters, choose Next
 
 4. On the Options page, you can specify tags (key-value pairs) for resources in your stack and set advanced options. You can also leave it blank. When you’re done, choose Next.
@@ -276,7 +276,7 @@ Reference this screenshot for further detail:
 
 1. Once you have successfully run the app we want to test the app on device farm.
 2. First we want to retrieve the .ipa file of the app that we just built. As this process may not be seamless for everyone in the room given that you require an Apple Developer account and Xcode configured to do this we have provided a prebuilt IPA file which is exactly the same app that you build using Mobile Hub and modified in Lab 2.
-3. The prebuilt IPA can be found here https://github.com/awslabs/swift-ecs-workshop/tree/master/lab3/MySampleApp.ipa with the name "MySampleApp.ipa". We would recommend using this. If you have your Xcode configured and want to build IPA files by yourself, you can follow the steps in the next optional section (Steps to build IPA) below.
+3. The prebuilt IPA can be found [here](https://github.com/awslabs/swift-ecs-workshop/raw/master/lab3/MySampleApp.ipa) with the name "MySampleApp.ipa". We would recommend using this. If you have your Xcode configured and want to build IPA files by yourself, you can follow the steps in the next optional section (Steps to build IPA) below.
 4.	Open aws.amazon.com console.
 5.	On the console home page under Mobile Services select Device Farm.
 6.	Create a new Project. Give it a name “re:Invent 2016”.
