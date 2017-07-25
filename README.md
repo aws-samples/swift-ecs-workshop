@@ -106,9 +106,9 @@ The CloudFormation stack outputs a few commands that you’ll need during the de
 		```docker build -t swift-on-ecs-prebuilt --build-arg SWIFT_VERSION=3.0-RELEASE . ```
 
 	* Retrieve the Docker login command
-	`aws ecr get-login --region us-east-1`
+	`$(aws ecr get-login --region us-east-1)`
 
-	* Run the output of the previous command to log into Docker. You might see a warning about a deprecated flag. This should be no cause for concern as long as you see the "Login Succeeded." message.
+	*  You might see a warning about a deprecated flag. This should be no cause for concern as long as you see the "Login Succeeded." message.
 
 	*	Tag the image using the `{{TagPreBuiltImage}}` from Cloudformation outputs.
 
@@ -124,7 +124,7 @@ The CloudFormation stack outputs a few commands that you’ll need during the de
 		*	Host port: 80
 		*	Container port: 8080
 		* 	Protocol: `tcp`
-		*	Click ‘Add Container’
+		*	Click ‘Add’
 
 	*	Click ‘Create’
 
@@ -197,7 +197,7 @@ For example, if you are going to run the above with `curl` it would look like th
 6.	We want to add a simple login using Facebook to our sample application. We will be using AWS Cognito for this.
 7.	Click on User-sign in card.
 8.	You should see 4 options with Facebook, Google, SAML and Custom offered as choices. Select Facebook.
-9.	If you expand the documentation column using the blue arrow on the right side of the page, it will show you the instructions to enable Facebook login.
+9.	If you expand the documentation column using the blue question mark on the right side of the page, it will show you the instructions to enable Facebook login.
 10.	Follow the steps to enable a Facebook developer account, to create a Facebook app, and to enable your iOS app to login to Facebook.
 11.	Once the Facebook developer account is activated we want to copy the App id of our sample application so that we can use Facebook login in our sample app.
 12.	Paste the App id in the AWS Mobile Hub console page where we let off.
