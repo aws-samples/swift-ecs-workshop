@@ -62,11 +62,12 @@ You can change the region by using the region selector in the navigation bar. Ch
 2. On the Select Template page, upload the downloaded template, and then choose Next.
 
 3. On the Specify Details page, review the parameters for the template. All the parameters on this page require input.
-	* Stack name: Up to you
-	* ECRRepository: Up to you
+	* Stack name: Up to you (e.g. ecs-swift, watch out for restricted characters)
+	* ECRRepository: Up to you (e.g. vapor, same warning)
 	* KeyName: Select your new keypair
-	* KeyPairPath: The local path of the keypair file on your machine
-	* SSHLocation: `<your-public-ip>/32`. * When you finish reviewing and customizing the parameters, choose Next
+	* KeyPairPath: The local path of the keypair file on your machine (don't leave empty)
+	* SSHLocation: `<your-public-ip>/32`. This is the IP you will be connecting from to the bastion host.
+	 When you finish reviewing and customizing the parameters, choose Next
 
 4. On the Options page, you can specify tags (key-value pairs) for resources in your stack and set advanced options. You can also leave it blank. When you’re done, choose Next.
 
