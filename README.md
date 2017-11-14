@@ -35,7 +35,7 @@ At the end of this workshop, you will know how to develop and deploy a complete 
 > Use the region selector in the navigation bar to choose the Amazon EC2 region where you want to deploy Swift web application on AWS.
 
 Create a key pair in your preferred region.
-You can follow steps here: [http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair]()
+You can follow steps here: [http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair)
 
 Move the file to a safe location. By default, you store your local PEM files in `~/.ssh`. Also, change the permission on your keypair with the following command.
 `chmod 400 <your keypair>`
@@ -62,11 +62,12 @@ You can change the region by using the region selector in the navigation bar. Ch
 2. On the Select Template page, upload the downloaded template, and then choose Next.
 
 3. On the Specify Details page, review the parameters for the template. All the parameters on this page require input.
-	* Stack name: Up to you
-	* ECRRepository: Up to you
+	* Stack name: Up to you (e.g. ecs-swift, watch out for restricted characters)
+	* ECRRepository: Up to you (e.g. vapor, same warning)
 	* KeyName: Select your new keypair
-	* KeyPairPath: The local path of the keypair file on your machine
-	* SSHLocation: `<your-public-ip>/32`. * When you finish reviewing and customizing the parameters, choose Next
+	* KeyPairPath: The local path of the keypair file on your machine (don't leave empty)
+	* SSHLocation: `<your-public-ip>/32`. This is the IP address you will be connecting from to the bastion host.
+	 When you finish reviewing and customizing the parameters, choose Next
 
 4. On the Options page, you can specify tags (key-value pairs) for resources in your stack and set advanced options. You can also leave it blank. When you’re done, choose Next.
 
@@ -106,7 +107,7 @@ The CloudFormation stack outputs a few commands that you’ll need during the de
 		```docker build -t swift-on-ecs-prebuilt --build-arg SWIFT_VERSION=3.0-RELEASE . ```
 
 	* Retrieve the Docker login command
-	`$(aws ecr get-login --region us-east-1)`
+	`$(aws ecr get-login --no-include-email --region us-east-1)`
 
 	*  You might see a warning about a deprecated flag. This should be no cause for concern as long as you see the "Login Succeeded." message.
 
@@ -275,7 +276,7 @@ Reference this screenshot for further detail:
 
 1. Once you have successfully run the app we want to test the app on device farm.
 2. First we want to retrieve the .ipa file of the app that we just built. As this process may not be seamless for everyone in the room given that you require an Apple Developer account and Xcode configured to do this we have provided a prebuilt IPA file which is exactly the same app that you build using Mobile Hub and modified in Lab 2.
-3. The prebuilt IPA can be found here https://github.com/awslabs/swift-ecs-workshop/tree/master/lab3/MySampleApp.ipa with the name "MySampleApp.ipa". We would recommend using this. If you have your Xcode configured and want to build IPA files by yourself, you can follow the steps in the next optional section (Steps to build IPA) below.
+3. The prebuilt IPA can be found [here](https://github.com/awslabs/swift-ecs-workshop/raw/master/lab3/MySampleApp.ipa) with the name "MySampleApp.ipa". We would recommend using this. If you have your Xcode configured and want to build IPA files by yourself, you can follow the steps in the next optional section (Steps to build IPA) below.
 4.	Open aws.amazon.com console.
 5.	On the console home page under Mobile Services select Device Farm.
 6.	Create a new Project. Give it a name “re:Invent 2016”.
